@@ -52,7 +52,7 @@ plate-app/
 
 ## Tech Stack
 
-- **Frontend**: Next.js 16 (React)
+- **Frontend**: Next.js 16 (React) 
 - **Database**: Supabase (PostgreSQL)
 - **Styling**: CSS Modules
 - **Hosting**: Vercel (recommended)
@@ -67,9 +67,9 @@ plate-app/
 - ✅ Custom food creation
 - ✅ Simple food database (seed data included)
 
-### Phase 2: Enhancement
-- Food search with autocomplete
-- Pre-seeded USDA food database
+### Phase 2: Enhancement ✅
+- Food search with autocomplete ✅ 
+- Pre-seeded USDA food database ✅
 - History view
 - Edit/delete entries
 - Favorites system
@@ -78,6 +78,6 @@ plate-app/
 - Weekly analytics/charts
 - Data export
 - PWA features
-- Dark mode
+- Dark mode ✅  
 - Meal templates
 ~~

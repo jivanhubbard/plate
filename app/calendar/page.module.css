@@ -1,0 +1,317 @@
+.container {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--input-bg);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--foreground);
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  margin: 0.25rem 0 0 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navLink {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.navLink:hover {
+  background: var(--input-bg);
+  border-color: var(--primary);
+}
+
+.logoutButton {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logoutButton:hover {
+  background: var(--input-bg);
+}
+
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.monthTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.navButton {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.navButton:hover {
+  background: var(--input-bg);
+  border-color: var(--primary);
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+.legendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendDot.success {
+  background: var(--success);
+}
+
+.legendDot.partial {
+  background: var(--warning);
+}
+
+.legendDot.over {
+  background: var(--danger);
+}
+
+.legendDot.low {
+  background: var(--border);
+}
+
+.calendar {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+
+.weekday {
+  padding: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day {
+  min-height: 80px;
+  padding: 0.5rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+  transition: background-color 0.2s;
+}
+
+.day:nth-child(7n) {
+  border-right: none;
+}
+
+.day.hasDay {
+  cursor: pointer;
+}
+
+.day.hasDay:hover {
+  background: var(--input-bg);
+}
+
+.day.success {
+  background: rgba(16, 185, 129, 0.1);
+  border-left: 3px solid var(--success);
+}
+
+.day.partial {
+  background: rgba(245, 158, 11, 0.1);
+  border-left: 3px solid var(--warning);
+}
+
+.day.over {
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid var(--danger);
+}
+
+.day.low {
+  background: var(--background);
+  border-left: 3px solid var(--border);
+}
+
+.day.empty {
+  background: var(--input-bg);
+  opacity: 0.5;
+}
+
+.dayNumber {
+  display: block;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  margin-bottom: 0.25rem;
+}
+
+.dayStats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+.goals {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.goals h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.goalsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.goalItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: var(--background);
+  border-radius: 8px;
+}
+
+.goalLabel {
+  font-size: 0.75rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  margin-bottom: 0.25rem;
+}
+
+.goalValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 1.125rem;
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .main {
+    padding: 1rem;
+  }
+
+  .day {
+    min-height: 60px;
+    padding: 0.25rem;
+  }
+
+  .dayStats {
+    display: none;
+  }
+
+  .goalsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .legend {
+    gap: 1rem;
+  }
+}
+

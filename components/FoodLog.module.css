@@ -1,0 +1,318 @@
+.container {
+  margin-top: 2rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.logItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color 0.2s;
+}
+
+.logItem:hover {
+  border-color: var(--primary);
+}
+
+.logInfo {
+  flex: 1;
+}
+
+.foodName {
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mealType {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--primary);
+  color: white;
+  border-radius: 4px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.servingInfo {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+}
+
+.macroInfo {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.8;
+  flex-wrap: wrap;
+}
+
+.macroInfo span {
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editButton {
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 40px;
+}
+
+.editButton:hover {
+  background: var(--input-bg);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.deleteButton {
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 40px;
+}
+
+.deleteButton:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--danger);
+}
+
+.deleteButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+.emptySubtext {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  opacity: 0.6;
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--background);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--foreground);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--foreground);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.closeButton:hover {
+  opacity: 1;
+}
+
+.editForm {
+  padding: 1.5rem;
+}
+
+.foodPreview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: var(--input-bg);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.foodPreview strong {
+  color: var(--foreground);
+}
+
+.foodPreview span {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.inputGroup label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.inputGroup input,
+.inputGroup select {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.macroPreview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.macroPreview span {
+  font-size: 0.75rem;
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+.macroPreview strong {
+  font-size: 0.875rem;
+  color: var(--primary);
+}
+
+.modalActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cancelButton:hover {
+  background: var(--input-bg);
+}
+
+.saveButton {
+  padding: 0.75rem 1.5rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .modalActions {
+    flex-direction: column-reverse;
+  }
+
+  .cancelButton,
+  .saveButton {
+    width: 100%;
+  }
+}

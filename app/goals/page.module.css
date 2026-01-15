@@ -1,0 +1,281 @@
+.container {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--input-bg);
+}
+
+.headerTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--foreground);
+}
+
+.headerSubtitle {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  margin: 0.25rem 0 0 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navLink {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.navLink:hover {
+  background: var(--input-bg);
+  border-color: var(--primary);
+}
+
+.logoutButton {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logoutButton:hover {
+  background: var(--input-bg);
+}
+
+.main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.card {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.subtitle {
+  color: var(--foreground);
+  opacity: 0.7;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.section {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.sectionHint {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.6;
+  margin-bottom: 1rem;
+}
+
+.macroRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.macroRow:last-child {
+  margin-bottom: 0;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.inputGroup input,
+.inputGroup select {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.cancelButton {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.cancelButton:hover {
+  background: var(--background);
+}
+
+.submitButton {
+  padding: 0.75rem 1.5rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  padding: 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  color: var(--danger);
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.success {
+  padding: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--success);
+  border-radius: 6px;
+  color: var(--success);
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 1.125rem;
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .headerActions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .main {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .macroRow {
+    grid-template-columns: 1fr;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .cancelButton,
+  .submitButton {
+    width: 100%;
+  }
+}
+

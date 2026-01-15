@@ -1,0 +1,224 @@
+'use client'
+
+import { useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import styles from './FoodLog.module.css'
+
+export default function FoodLog({ logs, onDelete, onUpdate }) {
+  const [deletingId, setDeletingId] = useState(null)
+  const [editingLog, setEditingLog] = useState(null)
+  const [editForm, setEditForm] = useState({
+    date: '',
+    servings: '',
+    meal_type: '',
+  })
+  const [saving, setSaving] = useState(false)
+
+  const handleDelete = async (logId) => {
+    if (!confirm('Are you sure you want to delete this entry?')) return
+
+    setDeletingId(logId)
+    try {
+      const { error } = await supabase
+        .from('food_log')
+        .delete()
+        .eq('id', logId)
+
+      if (error) throw error
+      onDelete()
+    } catch (error) {
+      console.error('Error deleting food log:', error)
+      alert('Failed to delete entry')
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
+  const openEditModal = (log) => {
+    setEditingLog(log)
+    setEditForm({
+      date: log.date,
+      servings: log.servings.toString(),
+      meal_type: log.meal_type || '',
+    })
+  }
+
+  const closeEditModal = () => {
+    setEditingLog(null)
+    setEditForm({ date: '', servings: '', meal_type: '' })
+  }
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault()
+    setSaving(true)
+
+    try {
+      const food = editingLog.foods
+      const servingsNum = parseFloat(editForm.servings) || 1
+
+      // Recalculate macros based on new servings
+      const calories = (parseFloat(food.calories) || 0) * servingsNum
+      const protein = (parseFloat(food.protein) || 0) * servingsNum
+      const fat = (parseFloat(food.fat) || 0) * servingsNum
+      const carbs = (parseFloat(food.carbs) || 0) * servingsNum
+
+      const { error } = await supabase
+        .from('food_log')
+        .update({
+          date: editForm.date,
+          servings: servingsNum,
+          meal_type: editForm.meal_type || null,
+          calories,
+          protein,
+          fat,
+          carbs,
+        })
+        .eq('id', editingLog.id)
+
+      if (error) throw error
+
+      closeEditModal()
+      if (onUpdate) onUpdate()
+    } catch (error) {
+      console.error('Error updating food log:', error)
+      alert('Failed to update entry')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (logs.length === 0) {
+    return (
+      <div className={styles.empty}>
+        <p>No food entries for this date.</p>
+        <p className={styles.emptySubtext}>Click "Add Food" to get started!</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.container}>
+      <h2 className={styles.title}>Food Log</h2>
+      <div className={styles.list}>
+        {logs.map((log) => (
+          <div key={log.id} className={styles.logItem}>
+            <div className={styles.logInfo}>
+              <div className={styles.foodName}>
+                {log.foods?.name || 'Unknown Food'}
+                {log.meal_type && (
+                  <span className={styles.mealType}>{log.meal_type}</span>
+                )}
+              </div>
+              <div className={styles.servingInfo}>
+                {log.servings}x {log.foods?.serving_size || ''} {log.foods?.serving_unit || ''}
+              </div>
+              <div className={styles.macroInfo}>
+                <span>{Math.round(log.calories)} kcal</span>
+                <span>P: {Math.round(log.protein)}g</span>
+                <span>F: {Math.round(log.fat)}g</span>
+                <span>C: {Math.round(log.carbs)}g</span>
+              </div>
+            </div>
+            <div className={styles.actions}>
+              <button
+                onClick={() => openEditModal(log)}
+                className={styles.editButton}
+                title="Edit entry"
+              >
+                ✎
+              </button>
+              <button
+                onClick={() => handleDelete(log.id)}
+                disabled={deletingId === log.id}
+                className={styles.deleteButton}
+                title="Delete entry"
+              >
+                {deletingId === log.id ? '...' : '×'}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Edit Modal */}
+      {editingLog && (
+        <div className={styles.modalOverlay} onClick={closeEditModal}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>Edit Entry</h3>
+              <button onClick={closeEditModal} className={styles.closeButton}>×</button>
+            </div>
+            <form onSubmit={handleEditSubmit} className={styles.editForm}>
+              <div className={styles.foodPreview}>
+                <strong>{editingLog.foods?.name}</strong>
+                <span>
+                  {editingLog.foods?.serving_size} {editingLog.foods?.serving_unit} = {editingLog.foods?.calories} kcal
+                </span>
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label htmlFor="edit-date">Date</label>
+                <input
+                  id="edit-date"
+                  type="date"
+                  value={editForm.date}
+                  onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label htmlFor="edit-servings">Servings</label>
+                <input
+                  id="edit-servings"
+                  type="number"
+                  step="0.1"
+                  min="0.1"
+                  value={editForm.servings}
+                  onChange={(e) => setEditForm({ ...editForm, servings: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label htmlFor="edit-meal">Meal Type</label>
+                <select
+                  id="edit-meal"
+                  value={editForm.meal_type}
+                  onChange={(e) => setEditForm({ ...editForm, meal_type: e.target.value })}
+                >
+                  <option value="">None</option>
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                  <option value="snack">Snack</option>
+                </select>
+              </div>
+
+              {editForm.servings && (
+                <div className={styles.macroPreview}>
+                  <span>New totals:</span>
+                  <strong>
+                    {Math.round((parseFloat(editingLog.foods?.calories) || 0) * parseFloat(editForm.servings))} kcal,{' '}
+                    {Math.round((parseFloat(editingLog.foods?.protein) || 0) * parseFloat(editForm.servings))}g P,{' '}
+                    {Math.round((parseFloat(editingLog.foods?.fat) || 0) * parseFloat(editForm.servings))}g F,{' '}
+                    {Math.round((parseFloat(editingLog.foods?.carbs) || 0) * parseFloat(editForm.servings))}g C
+                  </strong>
+                </div>
+              )}
+
+              <div className={styles.modalActions}>
+                <button type="button" onClick={closeEditModal} className={styles.cancelButton}>
+                  Cancel
+                </button>
+                <button type="submit" disabled={saving} className={styles.saveButton}>
+                  {saving ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

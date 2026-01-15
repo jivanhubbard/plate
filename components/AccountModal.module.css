@@ -1,0 +1,314 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+  position: sticky;
+  top: 0;
+  background: var(--input-bg);
+  z-index: 1;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--foreground);
+}
+
+.closeButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+.content {
+  padding: 1.5rem;
+}
+
+.currentEmail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: var(--background);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
+.email {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.75rem;
+}
+
+.tab {
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--foreground);
+  opacity: 0.6;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  opacity: 1;
+  background: var(--background);
+}
+
+.tabActive {
+  opacity: 1;
+  background: var(--primary);
+  color: white;
+}
+
+.tabActive:hover {
+  background: var(--primary-hover);
+}
+
+.tabDanger.tabActive {
+  background: var(--danger);
+}
+
+.tabDanger.tabActive:hover {
+  background: #dc2626;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hint {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.7;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.inputGroup label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.inputGroup input {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.inputGroup input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.submitButton {
+  padding: 0.75rem 1.25rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dangerZone {
+  padding: 1.25rem;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+}
+
+.dangerTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--danger);
+  margin: 0 0 0.75rem 0;
+}
+
+.dangerText {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.8;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.dangerInput {
+  border-color: var(--danger) !important;
+}
+
+.dangerInput:focus {
+  border-color: var(--danger) !important;
+}
+
+.deleteButton {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.deleteButton:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.deleteButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.success {
+  padding: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--success);
+  border-radius: 6px;
+  color: var(--success);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.error {
+  padding: 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.footer {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.signOutButton {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.signOutButton:hover {
+  background: var(--background);
+  border-color: var(--foreground);
+}
+
+@media (max-width: 640px) {
+  .modal {
+    max-height: 100vh;
+    border-radius: 12px 12px 0 0;
+    margin-top: auto;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    flex: 1;
+    text-align: center;
+    min-width: fit-content;
+  }
+}
+

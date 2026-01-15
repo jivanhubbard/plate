@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Plate - Food Tracker App
 
-## Getting Started
+A lightweight, privacy-focused web application for tracking food intake and macronutrients during intermittent fasting.
 
-First, run the development server:
+## Setup Instructions
+
+### 1. Install Dependencies
+```bash
+npm install
+```
+
+### 2. Set Up Supabase
+
+1. Create a free account at [supabase.com](https://supabase.com)
+2. Create a new project
+3. Go to Settings > API to get your project URL and anon key
+4. Copy `.env.local.example` to `.env.local`:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+5. Fill in your Supabase credentials in `.env.local`
+
+### 3. Set Up Database
+
+1. Go to your Supabase project SQL Editor
+2. Copy and paste the contents of `supabase/schema.sql`
+3. Run the SQL script to create all tables and policies
+4. (Optional) Run `supabase/seed.sql` to populate common foods
+
+### 4. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+plate-app/
+├── app/              # Next.js app directory
+│   ├── auth/         # Authentication pages
+│   ├── dashboard/    # Main dashboard
+│   └── ...
+├── lib/              # Utility functions
+│   └── supabase.js   # Supabase client
+├── supabase/         # Database files
+│   └── schema.sql    # Database schema
+└── ...
+```
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend**: Next.js 16 (React)
+- **Database**: Supabase (PostgreSQL)
+- **Styling**: CSS Modules
+- **Hosting**: Vercel (recommended)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Development Phases
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Phase 1: MVP ✅
+- ✅ User authentication (sign up/sign in)
+- ✅ Basic food logging (add/delete entries)
+- ✅ Daily dashboard with macro totals and progress bars
+- ✅ Food search and selection
+- ✅ Custom food creation
+- ✅ Simple food database (seed data included)
 
-## Deploy on Vercel
+### Phase 2: Enhancement
+- Food search with autocomplete
+- Pre-seeded USDA food database
+- History view
+- Edit/delete entries
+- Favorites system
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Phase 3: Polish
+- Weekly analytics/charts
+- Data export
+- PWA features
+- Dark mode
+- Meal templates
+~~

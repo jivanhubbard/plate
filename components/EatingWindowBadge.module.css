@@ -1,0 +1,84 @@
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.badge.open {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--success);
+}
+
+.badge.closed {
+  background: var(--input-bg);
+  border-color: var(--border);
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.badge.open .indicator {
+  background: var(--success);
+  box-shadow: 0 0 8px var(--success);
+  animation: pulse 2s infinite;
+}
+
+.badge.closed .indicator {
+  background: var(--border);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+}
+
+.status {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+
+.time {
+  font-size: 0.75rem;
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+.window {
+  font-size: 0.75rem;
+  color: var(--foreground);
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .badge {
+    flex-wrap: wrap;
+  }
+
+  .window {
+    width: 100%;
+    margin-top: 0.25rem;
+    padding-left: 1.5rem;
+  }
+}
+

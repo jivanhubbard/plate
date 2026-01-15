@@ -1,0 +1,142 @@
+.container {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 1rem;
+  color: var(--foreground);
+  opacity: 0.5;
+  font-size: 0.875rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.titleIcon {
+  color: var(--water);
+}
+
+.stats {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
+.drops {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.drop {
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  color: var(--border);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drop svg {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.2s ease;
+}
+
+.drop:hover {
+  transform: scale(1.15);
+  color: var(--water);
+}
+
+.drop:hover svg {
+  filter: drop-shadow(0 0 8px var(--water-light));
+}
+
+.drop.filled {
+  color: var(--water);
+  animation: fillDrop 0.3s ease;
+}
+
+.drop.filled svg {
+  filter: drop-shadow(0 2px 8px var(--water-light));
+}
+
+@keyframes fillDrop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.addMore {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 2px dashed var(--water-muted);
+  background: transparent;
+  color: var(--water-muted);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addMore:hover {
+  opacity: 1;
+  border-color: var(--water);
+  color: var(--water);
+  transform: scale(1.1);
+}
+
+.extra {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--water);
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .drop {
+    width: 32px;
+    height: 32px;
+    padding: 5px;
+  }
+
+  .drops {
+    gap: 0.4rem;
+  }
+}
+

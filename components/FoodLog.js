@@ -4,6 +4,15 @@ import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import styles from './FoodLog.module.css'
 
+const MEAL_ORDER = ['breakfast', 'lunch', 'dinner', 'snack', null]
+const MEAL_LABELS = {
+  breakfast: 'Breakfast',
+  lunch: 'Lunch',
+  dinner: 'Dinner',
+  snack: 'Snack',
+  null: 'Other',
+}
+
 export default function FoodLog({ logs, onDelete, onUpdate }) {
   const [deletingId, setDeletingId] = useState(null)
   const [editingLog, setEditingLog] = useState(null)
@@ -13,6 +22,21 @@ export default function FoodLog({ logs, onDelete, onUpdate }) {
     meal_type: '',
   })
   const [saving, setSaving] = useState(false)
+
+  // Group logs by meal type
+  const groupedLogs = MEAL_ORDER.reduce((acc, mealType) => {
+    const key = mealType === null ? 'null' : mealType
+    const filtered = logs.filter((log) => {
+      if (mealType === null) {
+        return !log.meal_type || !MEAL_ORDER.slice(0, -1).includes(log.meal_type)
+      }
+      return log.meal_type === mealType
+    })
+    if (filtered.length > 0) {
+      acc[key] = filtered
+    }
+    return acc
+  }, {})
 
   const handleDelete = async (logId) => {
     if (!confirm('Are you sure you want to delete this entry?')) return
@@ -99,42 +123,64 @@ export default function FoodLog({ logs, onDelete, onUpdate }) {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Food Log</h2>
-      <div className={styles.list}>
-        {logs.map((log) => (
-          <div key={log.id} className={styles.logItem}>
-            <div className={styles.logInfo}>
-              <div className={styles.foodName}>
-                {log.foods?.name || 'Unknown Food'}
-                {log.meal_type && (
-                  <span className={styles.mealType}>{log.meal_type}</span>
-                )}
-              </div>
-              <div className={styles.servingInfo}>
-                {log.servings}x {log.foods?.serving_size || ''} {log.foods?.serving_unit || ''}
-              </div>
-              <div className={styles.macroInfo}>
-                <span>{Math.round(log.calories)} kcal</span>
-                <span>P: {Math.round(log.protein)}g</span>
-                <span>F: {Math.round(log.fat)}g</span>
-                <span>C: {Math.round(log.carbs)}g</span>
-              </div>
+      
+      <div className={styles.mealGroups}>
+        {Object.entries(groupedLogs).map(([mealType, mealLogs]) => (
+          <div 
+            key={mealType} 
+            className={`${styles.mealGroup} ${styles[`meal_${mealType}`]}`}
+          >
+            <div className={styles.mealHeader}>
+              <span className={styles.mealLabel}>
+                {MEAL_LABELS[mealType]}
+                <span className={styles.mealCount}>({mealLogs.length})</span>
+              </span>
             </div>
-            <div className={styles.actions}>
-              <button
-                onClick={() => openEditModal(log)}
-                className={styles.editButton}
-                title="Edit entry"
-              >
-                ✎
-              </button>
-              <button
-                onClick={() => handleDelete(log.id)}
-                disabled={deletingId === log.id}
-                className={styles.deleteButton}
-                title="Delete entry"
-              >
-                {deletingId === log.id ? '...' : '×'}
-              </button>
+            <div className={styles.mealContent}>
+              {mealLogs.map((log) => (
+                <div key={log.id} className={styles.logItem}>
+                  <div className={styles.logInfo}>
+                    <div className={styles.foodName}>
+                      {log.foods?.name || 'Unknown Food'}
+                    </div>
+                    <div className={styles.servingInfo}>
+                      {log.servings}x {log.foods?.serving_size || ''} {log.foods?.serving_unit || ''}
+                    </div>
+                    <div className={styles.macroInfo}>
+                      <span>{Math.round(log.calories)} kcal</span>
+                      <span>P: {Math.round(log.protein)}g</span>
+                      <span>F: {Math.round(log.fat)}g</span>
+                      <span>C: {Math.round(log.carbs)}g</span>
+                    </div>
+                  </div>
+                  <div className={styles.actions}>
+                    <button
+                      onClick={() => openEditModal(log)}
+                      className={styles.editButton}
+                      title="Edit entry"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                        <path d="m15 5 4 4"></path>
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => handleDelete(log.id)}
+                      disabled={deletingId === log.id}
+                      className={styles.deleteButton}
+                      title="Delete entry"
+                    >
+                      {deletingId === log.id ? '...' : (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 6h18"></path>
+                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ))}
@@ -142,11 +188,16 @@ export default function FoodLog({ logs, onDelete, onUpdate }) {
 
       {/* Edit Modal */}
       {editingLog && (
-        <div className={styles.modalOverlay} onClick={closeEditModal}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <div className={styles.modalHeader}>
               <h3>Edit Entry</h3>
-              <button onClick={closeEditModal} className={styles.closeButton}>×</button>
+              <button onClick={closeEditModal} className={styles.closeButton} aria-label="Close">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
             </div>
             <form onSubmit={handleEditSubmit} className={styles.editForm}>
               <div className={styles.foodPreview}>

@@ -21,6 +21,8 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
     carb_goal_type: 'target',
     eating_window_start: '12:00',
     eating_window_end: '20:00',
+    water_goal_cups: '8',
+    water_serving_oz: '8',
   })
 
   useEffect(() => {
@@ -38,6 +40,8 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
         carb_goal_type: userProfile.carb_goal_type || 'target',
         eating_window_start: userProfile.eating_window_start?.slice(0, 5) || '12:00',
         eating_window_end: userProfile.eating_window_end?.slice(0, 5) || '20:00',
+        water_goal_cups: userProfile.water_goal_cups?.toString() || '8',
+        water_serving_oz: userProfile.water_serving_oz?.toString() || '8',
       })
     }
   }, [userProfile])
@@ -68,6 +72,8 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
           carb_goal_type: formData.carb_goal_type,
           eating_window_start: formData.eating_window_start + ':00',
           eating_window_end: formData.eating_window_end + ':00',
+          water_goal_cups: parseInt(formData.water_goal_cups) || 8,
+          water_serving_oz: parseInt(formData.water_serving_oz) || 8,
         })
         .eq('id', userId)
 
@@ -82,14 +88,8 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
     }
   }
 
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose()
-    }
-  }
-
   return (
-    <div className={styles.overlay} onClick={handleOverlayClick}>
+    <div className={styles.overlay}>
       <div className={styles.modal}>
         <div className={styles.header}>
           <h2 className={styles.title}>Goals & Settings</h2>
@@ -250,6 +250,35 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
                     <option value="target">Target (hit this)</option>
                     <option value="limit">Limit (stay under)</option>
                   </select>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.section}>
+              <h3 className={styles.sectionTitle}>Water Tracking</h3>
+              <div className={styles.row}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="water_goal_cups">Daily Goal (cups)</label>
+                  <input
+                    id="water_goal_cups"
+                    name="water_goal_cups"
+                    type="number"
+                    min="1"
+                    max="20"
+                    value={formData.water_goal_cups}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="water_serving_oz">Oz per Cup</label>
+                  <input
+                    id="water_serving_oz"
+                    name="water_serving_oz"
+                    type="number"
+                    min="1"
+                    value={formData.water_serving_oz}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
             </div>

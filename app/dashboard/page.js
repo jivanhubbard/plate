@@ -12,6 +12,7 @@ import GoalsModal from '@/components/GoalsModal'
 import AccountModal from '@/components/AccountModal'
 import DarkModeToggle from '@/components/DarkModeToggle'
 import EatingWindowBadge from '@/components/EatingWindowBadge'
+import WaterTracker from '@/components/WaterTracker'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -219,6 +220,13 @@ export default function DashboardPage() {
             + Add Food
           </button>
         </div>
+
+        <WaterTracker
+          userId={user.id}
+          selectedDate={selectedDate}
+          waterGoal={userProfile.water_goal_cups || 8}
+          waterServingOz={userProfile.water_serving_oz || 8}
+        />
 
         <FoodLog
           logs={foodLogs}

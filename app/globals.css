@@ -11,6 +11,15 @@
   --progress-blue: #3b82f6;
   --border: #e5e7eb;
   --input-bg: #f9fafb;
+  /* Meal type colors - darker for light mode contrast */
+  --meal-breakfast: #d97706;
+  --meal-lunch: #0891b2;
+  --meal-dinner: #7c3aed;
+  --meal-snack: #16a34a;
+  /* Water color */
+  --water: #0284c7;
+  --water-light: #bae6fd;
+  --water-muted: #94a3b8;
   color-scheme: light;
 }
 
@@ -26,6 +35,15 @@
   --progress-blue: #60a5fa;
   --border: #374151;
   --input-bg: #1f2937;
+  /* Meal type colors - lighter for dark mode */
+  --meal-breakfast: #f59e0b;
+  --meal-lunch: #06b6d4;
+  --meal-dinner: #8b5cf6;
+  --meal-snack: #22c55e;
+  /* Water color */
+  --water: #38bdf8;
+  --water-light: #0c4a6e;
+  --water-muted: #475569;
   color-scheme: dark;
 }
 

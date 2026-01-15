@@ -7,7 +7,7 @@ import styles from './WaterTracker.module.css'
 export default function WaterTracker({ userId, selectedDate, waterGoal = 8, waterServingOz = 8 }) {
   const [cups, setCups] = useState(0)
   const [loading, setLoading] = useState(true)
-  const audioRef = useRef(null)
+  const audioContextRef = useRef(null)
 
   useEffect(() => {
     loadWaterLog()
@@ -53,12 +53,35 @@ export default function WaterTracker({ userId, selectedDate, waterGoal = 8, wate
     }
   }
 
-  const playWaterSound = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0
-      audioRef.current.play().catch(() => {
-        // Audio play failed, likely due to autoplay policy - that's okay
-      })
+  const playPopSound = () => {
+    try {
+      // Create audio context on demand (required for user interaction)
+      if (!audioContextRef.current) {
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)()
+      }
+      
+      const ctx = audioContextRef.current
+      const oscillator = ctx.createOscillator()
+      const gainNode = ctx.createGain()
+      
+      oscillator.connect(gainNode)
+      gainNode.connect(ctx.destination)
+      
+      // Short, subtle pop/click sound
+      oscillator.frequency.setValueAtTime(600, ctx.currentTime)
+      oscillator.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.05)
+      
+      oscillator.type = 'sine'
+      
+      // Quick fade in and out for a soft "pop"
+      gainNode.gain.setValueAtTime(0, ctx.currentTime)
+      gainNode.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.01)
+      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08)
+      
+      oscillator.start(ctx.currentTime)
+      oscillator.stop(ctx.currentTime + 0.08)
+    } catch (error) {
+      // Audio failed, that's okay - continue silently
     }
   }
 
@@ -72,7 +95,7 @@ export default function WaterTracker({ userId, selectedDate, waterGoal = 8, wate
     } else {
       setCups(newCups)
       updateWaterLog(newCups)
-      playWaterSound()
+      playPopSound()
     }
   }
 
@@ -80,7 +103,7 @@ export default function WaterTracker({ userId, selectedDate, waterGoal = 8, wate
     const newCups = cups + 1
     setCups(newCups)
     updateWaterLog(newCups)
-    playWaterSound()
+    playPopSound()
   }
 
   if (loading) {
@@ -96,12 +119,6 @@ export default function WaterTracker({ userId, selectedDate, waterGoal = 8, wate
 
   return (
     <div className={styles.container}>
-      <audio 
-        ref={audioRef} 
-        preload="auto"
-        src="https://assets.mixkit.co/active_storage/sfx/2617/2617-preview.mp3"
-      />
-
       <div className={styles.header}>
         <h3 className={styles.title}>
           <svg className={styles.titleIcon} width="20" height="20" viewBox="0 0 24 24" fill="currentColor">

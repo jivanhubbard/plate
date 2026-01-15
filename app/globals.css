@@ -24,8 +24,8 @@
 }
 
 [data-theme="dark"] {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+    --background: #0a0a0a;
+    --foreground: #ededed;
   --primary: #3b82f6;
   --primary-hover: #2563eb;
   --success: #10b981;
@@ -81,5 +81,5 @@ button {
 
 input, textarea, select {
   font-family: inherit;
-}
+  }
 

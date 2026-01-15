@@ -49,7 +49,7 @@ export default function Home() {
           <div className={styles.actions}>
             <a href="/auth/login" className={styles.primaryButton}>
               Sign In
-            </a>
+          </a>
             <a href="/auth/signup" className={styles.secondaryButton}>
               Create Account
             </a>

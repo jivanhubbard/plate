@@ -1,38 +1,65 @@
 .container {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: var(--background);
+  overflow: hidden;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: scale(1.05);
+  z-index: -2;
+}
+
+.container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 15, 20, 0.85) 0%,
+    rgba(30, 25, 40, 0.75) 50%,
+    rgba(20, 20, 30, 0.85) 100%
+  );
+  z-index: -1;
 }
 
 .card {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 400px;
-  padding: 2rem;
-  background: var(--input-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  background: rgba(20, 20, 25, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
 }
 
 .title {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--foreground);
+  color: #ffffff;
 }
 
 .subtitle {
-  color: var(--foreground);
-  opacity: 0.7;
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 2rem;
 }
 
 .instructions {
-  color: var(--foreground);
-  opacity: 0.7;
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 1.5rem;
   line-height: 1.5;
 }
@@ -52,37 +79,45 @@
 .inputGroup label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--foreground);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .inputGroup input {
-  padding: 0.75rem;
-  border: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
-  background: var(--background);
-  color: var(--foreground);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
   font-size: 1rem;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
+}
+
+.inputGroup input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .inputGroup input:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .button {
-  padding: 0.75rem 1.5rem;
-  background: var(--primary);
-  color: white;
+  padding: 0.875rem 1.5rem;
+  background: #ffffff;
+  color: #0f0f14;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
-  font-weight: 500;
-  transition: background-color 0.2s;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .button:hover:not(:disabled) {
-  background: var(--primary-hover);
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
 }
 
 .button:disabled {
@@ -92,10 +127,10 @@
 
 .error {
   padding: 0.75rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid var(--danger);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
   border-radius: 6px;
-  color: var(--danger);
+  color: #ff6b6b;
   margin-bottom: 1rem;
   font-size: 0.875rem;
 }
@@ -103,18 +138,18 @@
 .footer {
   margin-top: 1.5rem;
   text-align: center;
-  color: var(--foreground);
-  opacity: 0.7;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.875rem;
 }
 
 .link {
-  color: var(--primary);
+  color: #ffffff;
   font-weight: 500;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .link:hover {
-  color: var(--primary-hover);
+  color: rgba(255, 255, 255, 0.8);
 }
 

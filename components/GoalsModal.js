@@ -19,6 +19,7 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
     fat_goal_type: 'target',
     carb_goal: '200',
     carb_goal_type: 'target',
+    uses_intermittent_fasting: false,
     eating_window_start: '12:00',
     eating_window_end: '20:00',
     water_goal_cups: '8',
@@ -38,6 +39,7 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
         fat_goal_type: userProfile.fat_goal_type || 'target',
         carb_goal: userProfile.carb_goal?.toString() || '200',
         carb_goal_type: userProfile.carb_goal_type || 'target',
+        uses_intermittent_fasting: userProfile.uses_intermittent_fasting || false,
         eating_window_start: userProfile.eating_window_start?.slice(0, 5) || '12:00',
         eating_window_end: userProfile.eating_window_end?.slice(0, 5) || '20:00',
         water_goal_cups: userProfile.water_goal_cups?.toString() || '8',
@@ -57,24 +59,32 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
     setError(null)
 
     try {
+      const updateData = {
+        weight: parseFloat(formData.weight) || null,
+        target_weight: parseFloat(formData.target_weight) || null,
+        calorie_goal: parseInt(formData.calorie_goal) || 2200,
+        calorie_goal_type: formData.calorie_goal_type,
+        protein_goal: parseInt(formData.protein_goal) || 200,
+        protein_goal_type: formData.protein_goal_type,
+        fat_goal: parseInt(formData.fat_goal) || 80,
+        fat_goal_type: formData.fat_goal_type,
+        carb_goal: parseInt(formData.carb_goal) || 200,
+        carb_goal_type: formData.carb_goal_type,
+        uses_intermittent_fasting: formData.uses_intermittent_fasting,
+        water_goal_cups: parseInt(formData.water_goal_cups) || 8,
+        water_serving_oz: parseInt(formData.water_serving_oz) || 8,
+        onboarding_complete: true, // Mark onboarding as done when saving goals
+      }
+      
+      // Only include eating window times if IF is enabled
+      if (formData.uses_intermittent_fasting) {
+        updateData.eating_window_start = formData.eating_window_start + ':00'
+        updateData.eating_window_end = formData.eating_window_end + ':00'
+      }
+
       const { error: updateError } = await supabase
         .from('users')
-        .update({
-          weight: parseFloat(formData.weight) || null,
-          target_weight: parseFloat(formData.target_weight) || null,
-          calorie_goal: parseInt(formData.calorie_goal) || 2200,
-          calorie_goal_type: formData.calorie_goal_type,
-          protein_goal: parseInt(formData.protein_goal) || 200,
-          protein_goal_type: formData.protein_goal_type,
-          fat_goal: parseInt(formData.fat_goal) || 80,
-          fat_goal_type: formData.fat_goal_type,
-          carb_goal: parseInt(formData.carb_goal) || 200,
-          carb_goal_type: formData.carb_goal_type,
-          eating_window_start: formData.eating_window_start + ':00',
-          eating_window_end: formData.eating_window_end + ':00',
-          water_goal_cups: parseInt(formData.water_goal_cups) || 8,
-          water_serving_oz: parseInt(formData.water_serving_oz) || 8,
-        })
+        .update(updateData)
         .eq('id', userId)
 
       if (updateError) throw updateError
@@ -284,29 +294,44 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
             </div>
 
             <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Eating Window (Intermittent Fasting)</h3>
-              <div className={styles.row}>
-                <div className={styles.inputGroup}>
-                  <label htmlFor="eating_window_start">Start Time</label>
+              <h3 className={styles.sectionTitle}>Intermittent Fasting</h3>
+              <div className={styles.toggleRow}>
+                <label className={styles.toggle}>
                   <input
-                    id="eating_window_start"
-                    name="eating_window_start"
-                    type="time"
-                    value={formData.eating_window_start}
-                    onChange={handleChange}
+                    type="checkbox"
+                    checked={formData.uses_intermittent_fasting}
+                    onChange={(e) => setFormData({ ...formData, uses_intermittent_fasting: e.target.checked })}
                   />
-                </div>
-                <div className={styles.inputGroup}>
-                  <label htmlFor="eating_window_end">End Time</label>
-                  <input
-                    id="eating_window_end"
-                    name="eating_window_end"
-                    type="time"
-                    value={formData.eating_window_end}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <span className={styles.toggleSlider}></span>
+                </label>
+                <span className={styles.toggleLabel}>
+                  Enable eating window tracking
+                </span>
               </div>
+              {formData.uses_intermittent_fasting && (
+                <div className={styles.row}>
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="eating_window_start">Window Opens</label>
+                    <input
+                      id="eating_window_start"
+                      name="eating_window_start"
+                      type="time"
+                      value={formData.eating_window_start}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="eating_window_end">Window Closes</label>
+                    <input
+                      id="eating_window_end"
+                      name="eating_window_end"
+                      type="time"
+                      value={formData.eating_window_end}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className={styles.actions}>

@@ -112,11 +112,42 @@
   flex: 1;
 }
 
+.foodNameRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
 .foodName {
   font-weight: 600;
   font-size: 1rem;
-  margin-bottom: 0.35rem;
   color: var(--foreground);
+}
+
+.timeStamp {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--foreground);
+  opacity: 0.5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--background);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.timeStamp.outsideWindow {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+  opacity: 1;
+}
+
+.outsideIndicator {
+  font-size: 0.7rem;
 }
 
 .servingInfo {

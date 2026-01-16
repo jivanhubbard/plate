@@ -257,6 +257,111 @@
   font-size: 0.875rem;
 }
 
+/* Brand Search Styles */
+.searchWithIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchWithIcon input {
+  flex: 1;
+  padding-right: 2.5rem;
+}
+
+.searchSpinner {
+  position: absolute;
+  right: 0.75rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.searchHint {
+  font-size: 0.8rem;
+  color: var(--foreground);
+  opacity: 0.5;
+  margin-top: 0.25rem;
+}
+
+.noResults {
+  padding: 1rem;
+  text-align: center;
+  color: var(--foreground);
+  opacity: 0.7;
+  font-size: 0.9rem;
+  background: var(--input-bg);
+  border-radius: 6px;
+  margin-top: 0.5rem;
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: inherit;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.linkButton:hover {
+  opacity: 0.8;
+}
+
+.brandFoodContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.foodImage {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.resultCount {
+  font-size: 0.8rem;
+  color: var(--foreground);
+  opacity: 0.5;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.poweredBy {
+  font-size: 0.75rem;
+  color: var(--foreground);
+  opacity: 0.5;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.poweredBy a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.poweredBy a:hover {
+  text-decoration: underline;
+}
+
+.brandNote {
+  font-size: 0.75rem;
+  color: var(--primary);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.timeInput {
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .modal {
     max-height: 95vh;

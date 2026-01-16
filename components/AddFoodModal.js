@@ -1,7 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
+import { searchProducts } from '@/lib/openFoodFacts'
+import { searchBrandedFoods } from '@/lib/usdaFoodData'
 import styles from './AddFoodModal.module.css'
 
 export default function AddFoodModal({ foods, selectedDate, userId, onClose, onFoodAdded }) {
@@ -9,9 +11,20 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
   const [selectedFood, setSelectedFood] = useState(null)
   const [servings, setServings] = useState('1')
   const [mealType, setMealType] = useState('')
-  const [showCustomForm, setShowCustomForm] = useState(false)
+  const [loggedTime, setLoggedTime] = useState(() => {
+    // Default to current time
+    const now = new Date()
+    return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+  })
+  const [activeTab, setActiveTab] = useState('my-foods') // 'my-foods', 'brand-search', 'custom'
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+
+  // Brand search state
+  const [brandSearchTerm, setBrandSearchTerm] = useState('')
+  const [brandResults, setBrandResults] = useState([])
+  const [brandSearching, setBrandSearching] = useState(false)
+  const [brandSearchCount, setBrandSearchCount] = useState(0)
 
   // Custom food form state
   const [customFood, setCustomFood] = useState({
@@ -28,9 +41,67 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
     food.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  // Debounced brand search - queries both Open Food Facts AND USDA
+  useEffect(() => {
+    if (activeTab !== 'brand-search' || brandSearchTerm.length < 2) {
+      setBrandResults([])
+      setBrandSearchCount(0)
+      return
+    }
+
+    const timeoutId = setTimeout(async () => {
+      setBrandSearching(true)
+      try {
+        // Query both databases in parallel for better brand coverage
+        const [offResult, usdaResult] = await Promise.all([
+          searchProducts(brandSearchTerm),
+          searchBrandedFoods(brandSearchTerm),
+        ])
+
+        // Merge results, prioritizing USDA for US brands
+        const combined = []
+        const seen = new Set()
+
+        // Add USDA results first (often better for US brands)
+        for (const product of usdaResult.products) {
+          const key = product.name.toLowerCase().replace(/\s+/g, '')
+          if (!seen.has(key)) {
+            seen.add(key)
+            combined.push(product)
+          }
+        }
+
+        // Add Open Food Facts results (good for international products)
+        for (const product of offResult.products) {
+          const key = product.name.toLowerCase().replace(/\s+/g, '')
+          if (!seen.has(key)) {
+            seen.add(key)
+            combined.push(product)
+          }
+        }
+
+        setBrandResults(combined)
+        setBrandSearchCount(offResult.count + usdaResult.totalHits)
+      } catch (err) {
+        console.error('Brand search error:', err)
+      } finally {
+        setBrandSearching(false)
+      }
+    }, 400) // Debounce 400ms
+
+    return () => clearTimeout(timeoutId)
+  }, [brandSearchTerm, activeTab])
+
   const handleSelectFood = (food) => {
     setSelectedFood(food)
     setSearchTerm('')
+    setBrandSearchTerm('')
+  }
+
+  const handleSelectBrandFood = (food) => {
+    // Mark as brand food so we know to save it to DB first
+    setSelectedFood({ ...food, isBrandFood: true })
+    setBrandSearchTerm('')
   }
 
   const handleSubmit = async (e) => {
@@ -40,9 +111,10 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
 
     try {
       let foodId = selectedFood?.id
+      let food = selectedFood
 
       // If creating custom food
-      if (showCustomForm) {
+      if (activeTab === 'custom') {
         const { data: newFood, error: foodError } = await supabase
           .from('foods')
           .insert({
@@ -61,15 +133,33 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
 
         if (foodError) throw foodError
         foodId = newFood.id
+        food = customFood
+      }
+      // If selecting a brand food, save it to our database first
+      else if (selectedFood?.isBrandFood) {
+        const { data: newFood, error: foodError } = await supabase
+          .from('foods')
+          .insert({
+            name: selectedFood.name,
+            serving_size: selectedFood.serving_size,
+            serving_unit: selectedFood.serving_unit,
+            calories: selectedFood.calories,
+            protein: selectedFood.protein || 0,
+            fat: selectedFood.fat || 0,
+            carbs: selectedFood.carbs || 0,
+            is_custom: true,
+            user_id: userId,
+          })
+          .select()
+          .single()
+
+        if (foodError) throw foodError
+        foodId = newFood.id
       }
 
       if (!foodId) {
         throw new Error('Please select or create a food')
       }
-
-      const food = showCustomForm
-        ? customFood
-        : selectedFood
 
       const servingsNum = parseFloat(servings) || 1
 
@@ -91,6 +181,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
           protein,
           fat,
           carbs,
+          logged_at: loggedTime + ':00', // Add seconds for TIME format
         })
 
       if (logError) throw logError
@@ -118,16 +209,22 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
 
         <div className={styles.tabs}>
           <button
-            className={`${styles.tab} ${!showCustomForm ? styles.active : ''}`}
-            onClick={() => setShowCustomForm(false)}
+            className={`${styles.tab} ${activeTab === 'my-foods' ? styles.active : ''}`}
+            onClick={() => { setActiveTab('my-foods'); setSelectedFood(null) }}
           >
-            Search Foods
+            My Foods
           </button>
           <button
-            className={`${styles.tab} ${showCustomForm ? styles.active : ''}`}
-            onClick={() => setShowCustomForm(true)}
+            className={`${styles.tab} ${activeTab === 'brand-search' ? styles.active : ''}`}
+            onClick={() => { setActiveTab('brand-search'); setSelectedFood(null) }}
           >
-            Custom Food
+            Brand Search
+          </button>
+          <button
+            className={`${styles.tab} ${activeTab === 'custom' ? styles.active : ''}`}
+            onClick={() => { setActiveTab('custom'); setSelectedFood(null) }}
+          >
+            Custom
           </button>
         </div>
 
@@ -136,15 +233,16 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
         )}
 
         <form onSubmit={handleSubmit} className={styles.form}>
-          {!showCustomForm ? (
+          {/* My Foods Tab */}
+          {activeTab === 'my-foods' && (
             <>
               <div className={styles.inputGroup}>
-                <label>Search Foods</label>
+                <label>Search My Foods</label>
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search for a food..."
+                  placeholder="Search your saved foods..."
                   className={styles.searchInput}
                 />
                 {searchTerm && filteredFoods.length > 0 && (
@@ -166,19 +264,79 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                     ))}
                   </div>
                 )}
-              </div>
-
-              {selectedFood && (
-                <div className={styles.selectedFood}>
-                  <strong>{selectedFood.name}</strong>
-                  <div className={styles.foodMacros}>
-                    {selectedFood.serving_size} {selectedFood.serving_unit}: {selectedFood.calories} kcal, 
-                    P: {selectedFood.protein}g, F: {selectedFood.fat}g, C: {selectedFood.carbs}g
+                {searchTerm && filteredFoods.length === 0 && (
+                  <div className={styles.noResults}>
+                    No matches found. Try <button type="button" onClick={() => setActiveTab('brand-search')} className={styles.linkButton}>Brand Search</button> or <button type="button" onClick={() => setActiveTab('custom')} className={styles.linkButton}>add custom food</button>.
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </>
-          ) : (
+          )}
+
+          {/* Brand Search Tab */}
+          {activeTab === 'brand-search' && (
+            <>
+              <div className={styles.inputGroup}>
+                <label>Search Brand Foods</label>
+                <div className={styles.searchWithIcon}>
+                  <input
+                    type="text"
+                    value={brandSearchTerm}
+                    onChange={(e) => setBrandSearchTerm(e.target.value)}
+                    placeholder="Search Doritos, Tillamook, Beecher's..."
+                    className={styles.searchInput}
+                  />
+                  {brandSearching && <span className={styles.searchSpinner}>⏳</span>}
+                </div>
+                {brandSearchTerm.length > 0 && brandSearchTerm.length < 2 && (
+                  <div className={styles.searchHint}>Type at least 2 characters...</div>
+                )}
+                {brandResults.length > 0 && (
+                  <div className={styles.foodList}>
+                    {brandResults.slice(0, 15).map((food) => (
+                      <button
+                        key={food.id}
+                        type="button"
+                        onClick={() => handleSelectBrandFood(food)}
+                        className={styles.foodItem}
+                      >
+                        <div className={styles.brandFoodContent}>
+                          {food.image_url && (
+                            <img 
+                              src={food.image_url} 
+                              alt="" 
+                              className={styles.foodImage}
+                              onError={(e) => e.target.style.display = 'none'}
+                            />
+                          )}
+                          <div>
+                            <div className={styles.foodName}>{food.name}</div>
+                            <div className={styles.foodDetails}>
+                              {food.serving_size}{food.serving_unit} • {food.calories} kcal • P:{food.protein}g F:{food.fat}g C:{food.carbs}g
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {brandSearchTerm.length >= 2 && !brandSearching && brandResults.length === 0 && (
+                  <div className={styles.noResults}>
+                    No brand foods found. Try a different search or <button type="button" onClick={() => setActiveTab('custom')} className={styles.linkButton}>add custom food</button>.
+                  </div>
+                )}
+                {brandSearchCount > 15 && (
+                  <div className={styles.resultCount}>Showing 15 of {brandSearchCount} results</div>
+                )}
+              </div>
+              <div className={styles.poweredBy}>
+                Powered by <a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener noreferrer">USDA FoodData Central</a> & <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener noreferrer">Open Food Facts</a>
+              </div>
+            </>
+          )}
+
+          {/* Custom Food Tab */}
+          {activeTab === 'custom' && (
             <div className={styles.customForm}>
               <div className={styles.inputGroup}>
                 <label>Food Name *</label>
@@ -257,16 +415,41 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
             </div>
           )}
 
-          <div className={styles.inputGroup}>
-            <label>Servings</label>
-            <input
-              type="number"
-              step="0.1"
-              min="0.1"
-              value={servings}
-              onChange={(e) => setServings(e.target.value)}
-              required
-            />
+          {/* Selected food display (for my-foods and brand-search tabs) */}
+          {selectedFood && activeTab !== 'custom' && (
+            <div className={styles.selectedFood}>
+              <strong>{selectedFood.name}</strong>
+              <div className={styles.foodMacros}>
+                {selectedFood.serving_size} {selectedFood.serving_unit}: {selectedFood.calories} kcal, 
+                P: {selectedFood.protein}g, F: {selectedFood.fat}g, C: {selectedFood.carbs}g
+              </div>
+              {selectedFood.isBrandFood && (
+                <div className={styles.brandNote}>This food will be saved to your foods</div>
+              )}
+            </div>
+          )}
+
+          <div className={styles.row}>
+            <div className={styles.inputGroup}>
+              <label>Servings</label>
+              <input
+                type="number"
+                step="0.1"
+                min="0.1"
+                value={servings}
+                onChange={(e) => setServings(e.target.value)}
+                required
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <label>Time</label>
+              <input
+                type="time"
+                value={loggedTime}
+                onChange={(e) => setLoggedTime(e.target.value)}
+                className={styles.timeInput}
+              />
+            </div>
           </div>
 
           <div className={styles.inputGroup}>

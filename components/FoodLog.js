@@ -13,7 +13,31 @@ const MEAL_LABELS = {
   null: 'Other',
 }
 
-export default function FoodLog({ logs, onDelete, onUpdate }) {
+// Helper to format time for display
+function formatTimeDisplay(timeStr) {
+  if (!timeStr) return null
+  const [hour, min] = timeStr.split(':').map(Number)
+  const period = hour >= 12 ? 'PM' : 'AM'
+  const displayHour = hour % 12 || 12
+  return `${displayHour}:${String(min).padStart(2, '0')} ${period}`
+}
+
+// Check if a time is within the eating window
+function isWithinEatingWindow(loggedAt, windowStart, windowEnd) {
+  if (!loggedAt || !windowStart || !windowEnd) return null
+  
+  const [logHour, logMin] = loggedAt.split(':').map(Number)
+  const [startHour, startMin] = windowStart.split(':').map(Number)
+  const [endHour, endMin] = windowEnd.split(':').map(Number)
+  
+  const logMinutes = logHour * 60 + logMin
+  const startMinutes = startHour * 60 + startMin
+  const endMinutes = endHour * 60 + endMin
+  
+  return logMinutes >= startMinutes && logMinutes < endMinutes
+}
+
+export default function FoodLog({ logs, onDelete, onUpdate, eatingWindow }) {
   const [deletingId, setDeletingId] = useState(null)
   const [editingLog, setEditingLog] = useState(null)
   const [editForm, setEditForm] = useState({
@@ -137,11 +161,26 @@ export default function FoodLog({ logs, onDelete, onUpdate }) {
               </span>
             </div>
             <div className={styles.mealContent}>
-              {mealLogs.map((log) => (
+              {mealLogs.map((log) => {
+                const withinWindow = eatingWindow?.enabled 
+                  ? isWithinEatingWindow(log.logged_at, eatingWindow.start, eatingWindow.end)
+                  : null
+                
+                return (
                 <div key={log.id} className={styles.logItem}>
                   <div className={styles.logInfo}>
-                    <div className={styles.foodName}>
-                      {log.foods?.name || 'Unknown Food'}
+                    <div className={styles.foodNameRow}>
+                      <span className={styles.foodName}>
+                        {log.foods?.name || 'Unknown Food'}
+                      </span>
+                      {log.logged_at && (
+                        <span className={`${styles.timeStamp} ${withinWindow === false ? styles.outsideWindow : ''}`}>
+                          {formatTimeDisplay(log.logged_at)}
+                          {withinWindow === false && (
+                            <span className={styles.outsideIndicator} title="Outside eating window">⚠</span>
+                          )}
+                        </span>
+                      )}
                     </div>
                     <div className={styles.servingInfo}>
                       {log.servings}x {log.foods?.serving_size || ''} {log.foods?.serving_unit || ''}
@@ -180,7 +219,7 @@ export default function FoodLog({ logs, onDelete, onUpdate }) {
                     </button>
                   </div>
                 </div>
-              ))}
+              )})}
             </div>
           </div>
         ))}

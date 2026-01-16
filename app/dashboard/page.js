@@ -72,8 +72,38 @@ export default function DashboardPage() {
         .eq('id', user.id)
         .single()
 
-      if (error) throw error
+      if (error) {
+        // If no profile exists, create one for the new user
+        if (error.code === 'PGRST116') {
+          const { data: newProfile, error: insertError } = await supabase
+            .from('users')
+            .insert({
+              id: user.id,
+              email: user.email,
+              onboarding_complete: false,
+            })
+            .select()
+            .single()
+
+          if (insertError) {
+            console.error('Error creating user profile:', insertError)
+            return
+          }
+
+          setUserProfile(newProfile)
+          // Show onboarding for new users
+          setShowGoalsModal(true)
+          return
+        }
+        throw error
+      }
+
       setUserProfile(data)
+      
+      // Show onboarding modal if user hasn't completed setup
+      if (!data.onboarding_complete) {
+        setShowGoalsModal(true)
+      }
     } catch (error) {
       console.error('Error loading user profile:', error)
     }
@@ -191,10 +221,12 @@ export default function DashboardPage() {
           />
         </div>
 
-        <EatingWindowBadge
-          windowStart={userProfile.eating_window_start}
-          windowEnd={userProfile.eating_window_end}
-        />
+        {userProfile.uses_intermittent_fasting && (
+          <EatingWindowBadge
+            windowStart={userProfile.eating_window_start}
+            windowEnd={userProfile.eating_window_end}
+          />
+        )}
 
         <MacroSummary
           totals={totals}
@@ -232,6 +264,11 @@ export default function DashboardPage() {
           logs={foodLogs}
           onDelete={handleFoodDeleted}
           onUpdate={handleFoodUpdated}
+          eatingWindow={userProfile.uses_intermittent_fasting ? {
+            enabled: true,
+            start: userProfile.eating_window_start,
+            end: userProfile.eating_window_end,
+          } : null}
         />
 
         {showAddModal && (

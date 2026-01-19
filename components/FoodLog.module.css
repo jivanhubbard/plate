@@ -115,7 +115,7 @@
 .foodNameRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 0.5rem;
   margin-bottom: 0.35rem;
 }
@@ -138,11 +138,18 @@
   background: var(--background);
   border-radius: 4px;
   white-space: nowrap;
+  margin-right: 0.75rem;
+}
+
+.timeStamp.insideWindow {
+  background: rgba(37, 99, 235, 0.15);
+  color: var(--primary);
+  opacity: 1;
 }
 
 .timeStamp.outsideWindow {
-  background: rgba(239, 68, 68, 0.15);
-  color: var(--danger);
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
   opacity: 1;
 }
 
@@ -410,6 +417,54 @@
   cursor: not-allowed;
 }
 
+/* Time Confirmation Dialog */
+.confirmModal {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 380px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.confirmIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.confirmTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 0.75rem 0;
+}
+
+.confirmText {
+  font-size: 0.95rem;
+  color: var(--foreground);
+  opacity: 0.8;
+  margin: 0 0 0.5rem 0;
+}
+
+.confirmText strong {
+  color: var(--primary);
+}
+
+.confirmHint {
+  font-size: 0.8rem;
+  color: var(--foreground);
+  opacity: 0.5;
+  margin: 0 0 1.5rem 0;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
 @media (max-width: 480px) {
   .mealGroup {
     padding: 1rem;
@@ -423,5 +478,9 @@
   .cancelButton,
   .saveButton {
     width: 100%;
+  }
+
+  .confirmActions {
+    flex-direction: column-reverse;
   }
 }

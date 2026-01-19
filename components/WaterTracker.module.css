@@ -66,15 +66,25 @@
 .drop svg {
   width: 100%;
   height: 100%;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.drop:hover {
+/* Empty drop hover - subtle opacity change instead of color */
+.drop:not(.filled):hover {
   transform: scale(1.15);
-  color: var(--water);
+  opacity: 0.6;
 }
 
-.drop:hover svg {
+.drop:not(.filled):hover svg {
+  filter: none;
+}
+
+/* Filled drop hover */
+.drop.filled:hover {
+  transform: scale(1.15);
+}
+
+.drop.filled:hover svg {
   filter: drop-shadow(0 0 8px var(--water-light));
 }
 

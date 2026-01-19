@@ -44,7 +44,11 @@ export default function FoodLog({ logs, onDelete, onUpdate, eatingWindow }) {
     date: '',
     servings: '',
     meal_type: '',
+    logged_at: '',
   })
+  const [originalTime, setOriginalTime] = useState('')
+  const [showTimeConfirm, setShowTimeConfirm] = useState(false)
+  const [pendingSubmit, setPendingSubmit] = useState(null)
   const [saving, setSaving] = useState(false)
 
   // Group logs by meal type
@@ -84,20 +88,39 @@ export default function FoodLog({ logs, onDelete, onUpdate, eatingWindow }) {
 
   const openEditModal = (log) => {
     setEditingLog(log)
+    const timeValue = log.logged_at ? log.logged_at.slice(0, 5) : ''
     setEditForm({
       date: log.date,
       servings: log.servings.toString(),
       meal_type: log.meal_type || '',
+      logged_at: timeValue,
     })
+    setOriginalTime(timeValue)
   }
 
   const closeEditModal = () => {
     setEditingLog(null)
-    setEditForm({ date: '', servings: '', meal_type: '' })
+    setEditForm({ date: '', servings: '', meal_type: '', logged_at: '' })
+    setOriginalTime('')
+    setShowTimeConfirm(false)
+    setPendingSubmit(null)
   }
 
   const handleEditSubmit = async (e) => {
     e.preventDefault()
+    
+    // Check if time was changed - show confirmation
+    const timeChanged = editForm.logged_at !== originalTime
+    if (timeChanged && !showTimeConfirm) {
+      setPendingSubmit(e)
+      setShowTimeConfirm(true)
+      return
+    }
+    
+    await performUpdate()
+  }
+
+  const performUpdate = async () => {
     setSaving(true)
 
     try {
@@ -110,17 +133,24 @@ export default function FoodLog({ logs, onDelete, onUpdate, eatingWindow }) {
       const fat = (parseFloat(food.fat) || 0) * servingsNum
       const carbs = (parseFloat(food.carbs) || 0) * servingsNum
 
+      const updateData = {
+        date: editForm.date,
+        servings: servingsNum,
+        meal_type: editForm.meal_type || null,
+        calories,
+        protein,
+        fat,
+        carbs,
+      }
+      
+      // Include time if it was set
+      if (editForm.logged_at) {
+        updateData.logged_at = editForm.logged_at + ':00'
+      }
+
       const { error } = await supabase
         .from('food_log')
-        .update({
-          date: editForm.date,
-          servings: servingsNum,
-          meal_type: editForm.meal_type || null,
-          calories,
-          protein,
-          fat,
-          carbs,
-        })
+        .update(updateData)
         .eq('id', editingLog.id)
 
       if (error) throw error
@@ -133,6 +163,18 @@ export default function FoodLog({ logs, onDelete, onUpdate, eatingWindow }) {
     } finally {
       setSaving(false)
     }
+  }
+
+  const confirmTimeChange = () => {
+    setShowTimeConfirm(false)
+    performUpdate()
+  }
+
+  const cancelTimeChange = () => {
+    setShowTimeConfirm(false)
+    setPendingSubmit(null)
+    // Revert time to original
+    setEditForm({ ...editForm, logged_at: originalTime })
   }
 
   if (logs.length === 0) {
@@ -166,6 +208,10 @@ export default function FoodLog({ logs, onDelete, onUpdate, eatingWindow }) {
                   ? isWithinEatingWindow(log.logged_at, eatingWindow.start, eatingWindow.end)
                   : null
                 
+                // Only show caution for items with 10+ calories (black coffee, etc. don't break a fast)
+                const caloriesBreaksFast = (parseFloat(log.calories) || 0) >= 10
+                const showOutsideWarning = withinWindow === false && caloriesBreaksFast
+                
                 return (
                 <div key={log.id} className={styles.logItem}>
                   <div className={styles.logInfo}>
@@ -174,9 +220,9 @@ export default function FoodLog({ logs, onDelete, onUpdate, eatingWindow }) {
                         {log.foods?.name || 'Unknown Food'}
                       </span>
                       {log.logged_at && (
-                        <span className={`${styles.timeStamp} ${withinWindow === false ? styles.outsideWindow : ''}`}>
+                        <span className={`${styles.timeStamp} ${withinWindow === true ? styles.insideWindow : ''} ${showOutsideWarning ? styles.outsideWindow : ''}`}>
                           {formatTimeDisplay(log.logged_at)}
-                          {withinWindow === false && (
+                          {showOutsideWarning && (
                             <span className={styles.outsideIndicator} title="Outside eating window">⚠</span>
                           )}
                         </span>
@@ -285,6 +331,16 @@ export default function FoodLog({ logs, onDelete, onUpdate, eatingWindow }) {
                 </select>
               </div>
 
+              <div className={styles.inputGroup}>
+                <label htmlFor="edit-time">Time Logged</label>
+                <input
+                  id="edit-time"
+                  type="time"
+                  value={editForm.logged_at}
+                  onChange={(e) => setEditForm({ ...editForm, logged_at: e.target.value })}
+                />
+              </div>
+
               {editForm.servings && (
                 <div className={styles.macroPreview}>
                   <span>New totals:</span>
@@ -306,6 +362,28 @@ export default function FoodLog({ logs, onDelete, onUpdate, eatingWindow }) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Time Change Confirmation Dialog */}
+      {showTimeConfirm && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.confirmModal}>
+            <div className={styles.confirmIcon}>⏱️</div>
+            <h3 className={styles.confirmTitle}>Change Time?</h3>
+            <p className={styles.confirmText}>
+              You're changing the logged time from <strong>{formatTimeDisplay(originalTime + ':00') || 'not set'}</strong> to <strong>{formatTimeDisplay(editForm.logged_at + ':00')}</strong>.
+            </p>
+            <p className={styles.confirmHint}>This affects eating window tracking.</p>
+            <div className={styles.confirmActions}>
+              <button onClick={cancelTimeChange} className={styles.cancelButton}>
+                Cancel
+              </button>
+              <button onClick={confirmTimeChange} className={styles.saveButton}>
+                Yes, Update Time
+              </button>
+            </div>
           </div>
         </div>
       )}

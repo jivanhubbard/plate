@@ -6,15 +6,38 @@ import { searchProducts } from '@/lib/openFoodFacts'
 import { searchBrandedFoods } from '@/lib/usdaFoodData'
 import styles from './AddFoodModal.module.css'
 
+// Helper to auto-select meal type based on time
+function getMealTypeFromTime(timeStr) {
+  if (!timeStr) return ''
+  const [hour, min] = timeStr.split(':').map(Number)
+  const totalMinutes = hour * 60 + min
+  
+  // 6:00 AM - 11:59 AM = breakfast
+  if (totalMinutes >= 360 && totalMinutes < 720) return 'breakfast'
+  // 12:00 PM - 2:00 PM = lunch
+  if (totalMinutes >= 720 && totalMinutes < 840) return 'lunch'
+  // 2:00 PM - 4:59 PM = snack
+  if (totalMinutes >= 840 && totalMinutes < 1020) return 'snack'
+  // 5:00 PM - 8:00 PM = dinner
+  if (totalMinutes >= 1020 && totalMinutes < 1200) return 'dinner'
+  // Outside these times = no auto-select
+  return ''
+}
+
 export default function AddFoodModal({ foods, selectedDate, userId, onClose, onFoodAdded }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedFood, setSelectedFood] = useState(null)
   const [servings, setServings] = useState('1')
-  const [mealType, setMealType] = useState('')
   const [loggedTime, setLoggedTime] = useState(() => {
     // Default to current time
     const now = new Date()
     return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+  })
+  // Auto-select meal type based on current time
+  const [mealType, setMealType] = useState(() => {
+    const now = new Date()
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+    return getMealTypeFromTime(timeStr)
   })
   const [activeTab, setActiveTab] = useState('my-foods') // 'my-foods', 'brand-search', 'custom'
   const [loading, setLoading] = useState(false)
@@ -37,9 +60,12 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
     carbs: '',
   })
 
-  const filteredFoods = foods.filter((food) =>
-    food.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // Filter and deduplicate foods by name (keep first occurrence)
+  const filteredFoods = foods
+    .filter((food) => food.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((food, index, self) => 
+      index === self.findIndex((f) => f.name.toLowerCase() === food.name.toLowerCase())
+    )
 
   // Debounced brand search - queries both Open Food Facts AND USDA
   useEffect(() => {
@@ -135,26 +161,40 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
         foodId = newFood.id
         food = customFood
       }
-      // If selecting a brand food, save it to our database first
+      // If selecting a brand food, check if it exists first, then save if not
       else if (selectedFood?.isBrandFood) {
-        const { data: newFood, error: foodError } = await supabase
+        // Check if this food already exists for this user (match by name)
+        const { data: existingFood } = await supabase
           .from('foods')
-          .insert({
-            name: selectedFood.name,
-            serving_size: selectedFood.serving_size,
-            serving_unit: selectedFood.serving_unit,
-            calories: selectedFood.calories,
-            protein: selectedFood.protein || 0,
-            fat: selectedFood.fat || 0,
-            carbs: selectedFood.carbs || 0,
-            is_custom: true,
-            user_id: userId,
-          })
-          .select()
+          .select('id')
+          .eq('user_id', userId)
+          .eq('name', selectedFood.name)
           .single()
 
-        if (foodError) throw foodError
-        foodId = newFood.id
+        if (existingFood) {
+          // Food already exists, use it
+          foodId = existingFood.id
+        } else {
+          // Create new food entry
+          const { data: newFood, error: foodError } = await supabase
+            .from('foods')
+            .insert({
+              name: selectedFood.name,
+              serving_size: selectedFood.serving_size,
+              serving_unit: selectedFood.serving_unit,
+              calories: selectedFood.calories,
+              protein: selectedFood.protein || 0,
+              fat: selectedFood.fat || 0,
+              carbs: selectedFood.carbs || 0,
+              is_custom: true,
+              user_id: userId,
+            })
+            .select()
+            .single()
+
+          if (foodError) throw foodError
+          foodId = newFood.id
+        }
       }
 
       if (!foodId) {

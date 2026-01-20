@@ -10,6 +10,8 @@ import MacroSummary from '@/components/MacroSummary'
 import AddFoodModal from '@/components/AddFoodModal'
 import GoalsModal from '@/components/GoalsModal'
 import AccountModal from '@/components/AccountModal'
+import CalendarModal from '@/components/CalendarModal'
+import AnalyticsModal from '@/components/AnalyticsModal'
 import DarkModeToggle from '@/components/DarkModeToggle'
 import EatingWindowBadge from '@/components/EatingWindowBadge'
 import WaterTracker from '@/components/WaterTracker'
@@ -25,6 +27,8 @@ export default function DashboardPage() {
   const [showAddModal, setShowAddModal] = useState(false)
   const [showGoalsModal, setShowGoalsModal] = useState(false)
   const [showAccountModal, setShowAccountModal] = useState(false)
+  const [showCalendarModal, setShowCalendarModal] = useState(false)
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false)
   const [selectedDate, setSelectedDate] = useState(() => {
     const urlDate = searchParams.get('date')
     if (urlDate) return urlDate
@@ -202,7 +206,8 @@ export default function DashboardPage() {
           <p className={styles.subtitle}>Macro Tracker</p>
         </div>
         <div className={styles.headerActions}>
-          <a href="/calendar" className={styles.navLink}>Calendar</a>
+          <button onClick={() => setShowCalendarModal(true)} className={styles.navLink}>Calendar</button>
+          <button onClick={() => setShowAnalyticsModal(true)} className={styles.navLink}>Analytics</button>
           <button onClick={() => setShowGoalsModal(true)} className={styles.navLink}>Goals</button>
           <DarkModeToggle />
           <button onClick={() => setShowAccountModal(true)} className={styles.navLink}>Account</button>
@@ -295,6 +300,23 @@ export default function DashboardPage() {
             user={user}
             onClose={() => setShowAccountModal(false)}
             onSignOut={handleLogout}
+          />
+        )}
+
+        {showCalendarModal && (
+          <CalendarModal
+            userId={user.id}
+            userProfile={userProfile}
+            onClose={() => setShowCalendarModal(false)}
+            onSelectDate={(date) => setSelectedDate(date)}
+          />
+        )}
+
+        {showAnalyticsModal && (
+          <AnalyticsModal
+            userId={user.id}
+            userProfile={userProfile}
+            onClose={() => setShowAnalyticsModal(false)}
           />
         )}
       </main>

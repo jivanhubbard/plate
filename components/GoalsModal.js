@@ -11,6 +11,10 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
   const [formData, setFormData] = useState({
     weight: '',
     target_weight: '',
+    height_inches: '',
+    date_of_birth: '',
+    gender: 'not_specified',
+    activity_level: 'moderate',
     calorie_goal: '2200',
     calorie_goal_type: 'limit',
     protein_goal: '200',
@@ -31,6 +35,10 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
       setFormData({
         weight: userProfile.weight || '',
         target_weight: userProfile.target_weight || '',
+        height_inches: userProfile.height_inches || '',
+        date_of_birth: userProfile.date_of_birth || '',
+        gender: userProfile.gender || 'not_specified',
+        activity_level: userProfile.activity_level || 'moderate',
         calorie_goal: userProfile.calorie_goal?.toString() || '2200',
         calorie_goal_type: userProfile.calorie_goal_type || 'limit',
         protein_goal: userProfile.protein_goal?.toString() || '200',
@@ -62,6 +70,10 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
       const updateData = {
         weight: parseFloat(formData.weight) || null,
         target_weight: parseFloat(formData.target_weight) || null,
+        height_inches: parseFloat(formData.height_inches) || null,
+        date_of_birth: formData.date_of_birth || null,
+        gender: formData.gender,
+        activity_level: formData.activity_level,
         calorie_goal: parseInt(formData.calorie_goal) || 2200,
         calorie_goal_type: formData.calorie_goal_type,
         protein_goal: parseInt(formData.protein_goal) || 200,
@@ -74,6 +86,19 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
         water_goal_cups: parseInt(formData.water_goal_cups) || 8,
         water_serving_oz: parseInt(formData.water_serving_oz) || 8,
         onboarding_complete: true, // Mark onboarding as done when saving goals
+      }
+      
+      // If weight changed, also log it to weight_log
+      if (formData.weight && parseFloat(formData.weight) !== userProfile?.weight) {
+        await supabase
+          .from('weight_log')
+          .upsert({
+            user_id: userId,
+            date: new Date().toISOString().split('T')[0],
+            weight: parseFloat(formData.weight),
+          }, {
+            onConflict: 'user_id,date'
+          })
       }
       
       // Only include eating window times if IF is enabled
@@ -145,6 +170,60 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
                     onChange={handleChange}
                     placeholder="e.g., 180"
                   />
+                </div>
+              </div>
+              <div className={styles.row}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="height_inches">Height (inches)</label>
+                  <input
+                    id="height_inches"
+                    name="height_inches"
+                    type="number"
+                    step="0.5"
+                    value={formData.height_inches}
+                    onChange={handleChange}
+                    placeholder="e.g., 70 (5ft 10in)"
+                  />
+                </div>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="date_of_birth">Date of Birth</label>
+                  <input
+                    id="date_of_birth"
+                    name="date_of_birth"
+                    type="date"
+                    value={formData.date_of_birth}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+              <div className={styles.row}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="gender">Sex (for BMR)</label>
+                  <select
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                  >
+                    <option value="not_specified">Prefer not to say</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="activity_level">Activity Level</label>
+                  <select
+                    id="activity_level"
+                    name="activity_level"
+                    value={formData.activity_level}
+                    onChange={handleChange}
+                  >
+                    <option value="sedentary">Sedentary (desk job)</option>
+                    <option value="light">Light (1-2 days/week)</option>
+                    <option value="moderate">Moderate (3-5 days/week)</option>
+                    <option value="active">Active (6-7 days/week)</option>
+                    <option value="very_active">Very Active (athlete)</option>
+                  </select>
                 </div>
               </div>
             </div>

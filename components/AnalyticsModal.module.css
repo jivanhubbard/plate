@@ -1,0 +1,293 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.closeButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+.content {
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 0.75rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.statCard {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.statLabel {
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--foreground);
+  opacity: 0.5;
+}
+
+.statValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.statHint {
+  font-size: 0.6rem;
+  color: var(--foreground);
+  opacity: 0.4;
+}
+
+.setupHint {
+  font-size: 0.8rem;
+  color: var(--primary);
+  margin: 0.75rem 0 0 0;
+  text-align: center;
+}
+
+/* Projection Card */
+.projectionCard {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.projectionRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.projectionLabel {
+  font-size: 0.75rem;
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
+.projectionValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.projectionArrow {
+  font-size: 1.25rem;
+  color: var(--foreground);
+  opacity: 0.3;
+  margin: 0.5rem 0;
+}
+
+.projectionTime {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+/* Mini Chart */
+.miniChart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  height: 70px;
+  gap: 0.25rem;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 0.5rem 0.5rem;
+}
+
+.chartBar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 36px;
+}
+
+.chartBarFill {
+  width: 100%;
+  background: linear-gradient(to top, var(--primary), rgba(37, 99, 235, 0.4));
+  border-radius: 3px 3px 0 0;
+  min-height: 4px;
+}
+
+.chartBarFillGreen {
+  width: 100%;
+  background: linear-gradient(to top, #10b981, rgba(16, 185, 129, 0.4));
+  border-radius: 3px 3px 0 0;
+  min-height: 4px;
+}
+
+.chartLabel {
+  font-size: 0.55rem;
+  color: var(--foreground);
+  opacity: 0.5;
+  margin-top: 0.25rem;
+}
+
+/* Weight Change */
+.weightChange {
+  text-align: center;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.positive {
+  color: #10b981;
+}
+
+.negative {
+  color: #ef4444;
+}
+
+/* Banners */
+.successBanner {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+}
+
+.warningBanner {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+  color: var(--foreground);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+/* Ketosis styles */
+.ketosis_likely {
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.15) !important;
+}
+
+.ketosis_possible {
+  border-color: #f59e0b !important;
+  background: rgba(245, 158, 11, 0.15) !important;
+}
+
+.daysNote {
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.5;
+  text-align: center;
+  margin: 0.5rem 0 0 0;
+}
+
+@media (max-width: 480px) {
+  .modal {
+    max-width: 100%;
+    max-height: 85vh;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .statValue {
+    font-size: 1rem;
+  }
+}
+

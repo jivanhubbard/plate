@@ -1,0 +1,250 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.closeButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+.content {
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.monthTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.navButton {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.navButton:hover {
+  background: var(--background);
+  border-color: var(--primary);
+}
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--foreground);
+  opacity: 0.7;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legendDot.success {
+  background: var(--success);
+}
+
+.legendDot.partial {
+  background: var(--warning);
+}
+
+.legendDot.over {
+  background: var(--danger);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
+.calendar {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--input-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.weekday {
+  padding: 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: var(--foreground);
+  opacity: 0.5;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day {
+  aspect-ratio: 1;
+  padding: 0.25rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.day:nth-child(7n) {
+  border-right: none;
+}
+
+.day:nth-last-child(-n+7) {
+  border-bottom: none;
+}
+
+.day.hasDay {
+  cursor: pointer;
+}
+
+.day.hasDay:hover {
+  background: var(--input-bg);
+}
+
+.day.success {
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.day.partial {
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.day.over {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.day.low {
+  background: var(--background);
+}
+
+.day.empty {
+  background: var(--input-bg);
+  opacity: 0.4;
+}
+
+.dayNumber {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--foreground);
+}
+
+.dayStats {
+  font-size: 0.55rem;
+  color: var(--foreground);
+  opacity: 0.6;
+  margin-top: 0.1rem;
+}
+
+@media (max-width: 480px) {
+  .modal {
+    max-width: 100%;
+    max-height: 85vh;
+  }
+
+  .day {
+    padding: 0.15rem;
+  }
+
+  .dayNumber {
+    font-size: 0.7rem;
+  }
+
+  .dayStats {
+    display: none;
+  }
+}
+

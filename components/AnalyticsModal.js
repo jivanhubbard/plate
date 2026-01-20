@@ -33,6 +33,7 @@ export default function AnalyticsModal({ userId, userProfile, onClose }) {
   const [weightHistory, setWeightHistory] = useState([])
   const [macroHistory, setMacroHistory] = useState([])
   const [todayLogs, setTodayLogs] = useState([])
+  const [lastMeal, setLastMeal] = useState(null)
 
   useEffect(() => {
     if (userId) {
@@ -77,7 +78,7 @@ export default function AnalyticsModal({ userId, userProfile, onClose }) {
       
       setMacroHistory(Object.values(dailyTotals))
 
-      // Load today's logs for fasting/ketosis calculation (use LOCAL date!)
+      // Load today's logs for ketosis calculation (use LOCAL date!)
       const today = getLocalDateString()
       const { data: todayData, error: todayError } = await supabase
         .from('food_log')
@@ -90,6 +91,25 @@ export default function AnalyticsModal({ userId, userProfile, onClose }) {
       }
       
       setTodayLogs(todayData || [])
+
+      // Load most recent food log with a timestamp (for fasting calculation)
+      // Exclude items under 10 kcal (like black coffee) that don't break fast
+      const { data: lastMealData, error: lastMealError } = await supabase
+        .from('food_log')
+        .select('date, logged_at, calories')
+        .eq('user_id', userId)
+        .not('logged_at', 'is', null)
+        .gte('calories', 10)
+        .order('date', { ascending: false })
+        .order('logged_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (lastMealError && lastMealError.code !== 'PGRST116') {
+        console.error('Error loading last meal:', lastMealError)
+      }
+      
+      setLastMeal(lastMealData || null)
 
     } catch (error) {
       console.error('Error loading analytics data:', error)
@@ -117,7 +137,7 @@ export default function AnalyticsModal({ userId, userProfile, onClose }) {
 
   const macroAverages = calculateMacroAverages(macroHistory)
   
-  const fastingHours = calculateFastingHours(todayLogs)
+  const fastingHours = calculateFastingHours(lastMeal?.date, lastMeal?.logged_at)
   const todayCarbs = todayLogs.reduce((sum, log) => sum + (parseFloat(log.carbs) || 0), 0)
   const ketosis = estimateKetosis(
     todayCarbs,

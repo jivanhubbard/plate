@@ -15,17 +15,22 @@ export default function WeekView({ userId, selectedDate, onSelectDate, calorieGo
     const sunday = new Date(current)
     sunday.setDate(current.getDate() - dayOfWeek)
     
+    // Get today's date string for comparison (local date)
+    const now = new Date()
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+    
     const dates = []
     for (let i = 0; i < 7; i++) {
       const date = new Date(sunday)
       date.setDate(sunday.getDate() + i)
+      const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
       dates.push({
-        date: date.toISOString().split('T')[0],
+        date: dateStr,
         dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
         dayNum: date.getDate(),
-        isToday: date.toISOString().split('T')[0] === new Date().toISOString().split('T')[0],
-        isSelected: date.toISOString().split('T')[0] === selectedDate,
-        isFuture: date > new Date(),
+        isToday: dateStr === todayStr,
+        isSelected: dateStr === selectedDate,
+        isFuture: dateStr > todayStr, // Compare date strings, not Date objects
       })
     }
     return dates

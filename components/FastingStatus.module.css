@@ -1,0 +1,189 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.loading {
+  color: var(--foreground);
+  opacity: 0.6;
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
+}
+
+/* Fasting Timer Section */
+.fastingSection {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  flex: 1;
+}
+
+.timerCircle {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+.circleProgress {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.circleBackground {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 3;
+}
+
+.circleFill {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.timerValue {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0px;
+  width: 80%;
+}
+
+.hours {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.minutes {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+.unit {
+  font-size: 0.5rem;
+  color: var(--foreground);
+  opacity: 0.5;
+  font-weight: 500;
+}
+
+.noData {
+  font-size: 1.25rem;
+  color: var(--foreground);
+  opacity: 0.4;
+}
+
+.fastingLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.labelTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.labelHint {
+  font-size: 0.75rem;
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
+/* Divider */
+.divider {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+}
+
+/* Ketosis Section */
+.ketosisSection {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.ketosisIcon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border-radius: 10px;
+  background: var(--background);
+  flex-shrink: 0;
+}
+
+.ketosisIcon.ketosis_likely {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.ketosisIcon.ketosis_possible {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.ketosisIcon.ketosis_unlikely,
+.ketosisIcon.ketosis_none,
+.ketosisIcon.ketosis_unknown {
+  background: var(--background);
+  color: var(--foreground);
+  opacity: 0.5;
+}
+
+.ketosisInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.ketosisStatus {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.ketosisDetail {
+  font-size: 0.75rem;
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .container {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .fastingSection,
+  .ketosisSection {
+    width: 100%;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+  }
+}
+

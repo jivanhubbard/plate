@@ -75,14 +75,19 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
       return
     }
 
+    let cancelled = false
+    setBrandSearching(true)
+
     const timeoutId = setTimeout(async () => {
-      setBrandSearching(true)
       try {
         // Query both databases in parallel for better brand coverage
         const [offResult, usdaResult] = await Promise.all([
           searchProducts(brandSearchTerm),
           searchBrandedFoods(brandSearchTerm),
         ])
+
+        // Don't update state if this request was cancelled
+        if (cancelled) return
 
         // Merge results, prioritizing USDA for US brands
         const combined = []
@@ -109,13 +114,21 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
         setBrandResults(combined)
         setBrandSearchCount(offResult.count + usdaResult.totalHits)
       } catch (err) {
-        console.error('Brand search error:', err)
+        if (!cancelled) {
+          console.error('Brand search error:', err)
+        }
       } finally {
-        setBrandSearching(false)
+        if (!cancelled) {
+          setBrandSearching(false)
+        }
       }
-    }, 400) // Debounce 400ms
+    }, 300) // Reduced debounce from 400ms to 300ms
 
-    return () => clearTimeout(timeoutId)
+    return () => {
+      cancelled = true
+      clearTimeout(timeoutId)
+      setBrandSearching(false)
+    }
   }, [brandSearchTerm, activeTab])
 
   const handleSelectFood = (food) => {
@@ -326,7 +339,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                     placeholder="Search Doritos, Tillamook, Beecher's..."
                     className={styles.searchInput}
                   />
-                  {brandSearching && <span className={styles.searchSpinner}>⏳</span>}
+                  {brandSearching && <span className={styles.searchSpinner}></span>}
                 </div>
                 {brandSearchTerm.length > 0 && brandSearchTerm.length < 2 && (
                   <div className={styles.searchHint}>Type at least 2 characters...</div>

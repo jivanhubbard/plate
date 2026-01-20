@@ -15,6 +15,7 @@ import AnalyticsModal from '@/components/AnalyticsModal'
 import DarkModeToggle from '@/components/DarkModeToggle'
 import EatingWindowBadge from '@/components/EatingWindowBadge'
 import WaterTracker from '@/components/WaterTracker'
+import WeekView from '@/components/WeekView'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -215,6 +216,13 @@ export default function DashboardPage() {
       </header>
 
       <main className={styles.main}>
+        <WeekView
+          userId={user.id}
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+          calorieGoal={userProfile.calorie_goal}
+        />
+
         <div className={styles.dateSelector}>
           <label htmlFor="date">Date:</label>
           <input

@@ -62,6 +62,14 @@ export default function MacroSummary({ totals, goals, goalTypes = {} }) {
       unit: 'g',
       goalType: goalTypes.carbs || 'limit',
     },
+    {
+      key: 'fiber',
+      label: 'Fiber',
+      current: Math.round(totals.fiber || 0),
+      goal: goals.fiber || 30,
+      unit: 'g',
+      goalType: goalTypes.fiber || 'target',
+    },
   ]
 
   return (

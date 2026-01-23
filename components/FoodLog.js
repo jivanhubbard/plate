@@ -236,6 +236,7 @@ export default function FoodLog({ logs, onDelete, onUpdate, eatingWindow }) {
                       <span>P: {Math.round(log.protein)}g</span>
                       <span>F: {Math.round(log.fat)}g</span>
                       <span>C: {Math.round(log.carbs)}g</span>
+                      <span>Fb: {Math.round(log.fiber || 0)}g</span>
                     </div>
                   </div>
                   <div className={styles.actions}>

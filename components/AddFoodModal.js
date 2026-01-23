@@ -58,6 +58,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
     protein: '',
     fat: '',
     carbs: '',
+    fiber: '',
   })
 
   // Filter and deduplicate foods by name (keep first occurrence)
@@ -164,6 +165,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
             protein: parseFloat(customFood.protein) || 0,
             fat: parseFloat(customFood.fat) || 0,
             carbs: parseFloat(customFood.carbs) || 0,
+            fiber: parseFloat(customFood.fiber) || 0,
             is_custom: true,
             user_id: userId,
           })
@@ -199,6 +201,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
               protein: selectedFood.protein || 0,
               fat: selectedFood.fat || 0,
               carbs: selectedFood.carbs || 0,
+              fiber: selectedFood.fiber || 0,
               is_custom: true,
               user_id: userId,
             })
@@ -221,6 +224,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
       const protein = (parseFloat(food.protein) || 0) * servingsNum
       const fat = (parseFloat(food.fat) || 0) * servingsNum
       const carbs = (parseFloat(food.carbs) || 0) * servingsNum
+      const fiber = (parseFloat(food.fiber) || 0) * servingsNum
 
       const { error: logError } = await supabase
         .from('food_log')
@@ -234,6 +238,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
           protein,
           fat,
           carbs,
+          fiber,
           logged_at: loggedTime + ':00', // Add seconds for TIME format
         })
 
@@ -365,7 +370,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                           <div>
                             <div className={styles.foodName}>{food.name}</div>
                             <div className={styles.foodDetails}>
-                              {food.serving_size}{food.serving_unit} • {food.calories} kcal • P:{food.protein}g F:{food.fat}g C:{food.carbs}g
+                              {food.serving_size}{food.serving_unit} • {food.calories} kcal • P:{food.protein}g F:{food.fat}g C:{food.carbs}g Fb:{food.fiber || 0}g
                             </div>
                           </div>
                         </div>
@@ -464,6 +469,15 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                     onChange={(e) => setCustomFood({ ...customFood, carbs: e.target.value })}
                   />
                 </div>
+                <div className={styles.inputGroup}>
+                  <label>Fiber (g)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={customFood.fiber}
+                    onChange={(e) => setCustomFood({ ...customFood, fiber: e.target.value })}
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -474,7 +488,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
               <strong>{selectedFood.name}</strong>
               <div className={styles.foodMacros}>
                 {selectedFood.serving_size} {selectedFood.serving_unit}: {selectedFood.calories} kcal, 
-                P: {selectedFood.protein}g, F: {selectedFood.fat}g, C: {selectedFood.carbs}g
+                P: {selectedFood.protein}g, F: {selectedFood.fat}g, C: {selectedFood.carbs}g, Fb: {selectedFood.fiber || 0}g
               </div>
               {selectedFood.isBrandFood && (
                 <div className={styles.brandNote}>This food will be saved to your foods</div>

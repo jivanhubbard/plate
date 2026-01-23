@@ -197,8 +197,9 @@ export default function DashboardPage() {
       protein: acc.protein + (parseFloat(log.protein) || 0),
       fat: acc.fat + (parseFloat(log.fat) || 0),
       carbs: acc.carbs + (parseFloat(log.carbs) || 0),
+      fiber: acc.fiber + (parseFloat(log.fiber) || 0),
     }),
-    { calories: 0, protein: 0, fat: 0, carbs: 0 }
+    { calories: 0, protein: 0, fat: 0, carbs: 0, fiber: 0 }
   )
 
   return (
@@ -293,12 +294,14 @@ export default function DashboardPage() {
             protein: userProfile.protein_goal,
             fat: userProfile.fat_goal,
             carbs: userProfile.carb_goal,
+            fiber: userProfile.fiber_goal || 30,
           }}
           goalTypes={{
             calories: userProfile.calorie_goal_type || 'limit',
             protein: userProfile.protein_goal_type || 'target',
             fat: userProfile.fat_goal_type || 'target',
             carbs: userProfile.carb_goal_type || 'target',
+            fiber: userProfile.fiber_goal_type || 'target',
           }}
         />
 

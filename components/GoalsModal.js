@@ -23,6 +23,8 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
     fat_goal_type: 'target',
     carb_goal: '200',
     carb_goal_type: 'target',
+    fiber_goal: '30',
+    fiber_goal_type: 'target',
     uses_intermittent_fasting: false,
     eating_window_start: '12:00',
     eating_window_end: '20:00',
@@ -47,6 +49,8 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
         fat_goal_type: userProfile.fat_goal_type || 'target',
         carb_goal: userProfile.carb_goal?.toString() || '200',
         carb_goal_type: userProfile.carb_goal_type || 'target',
+        fiber_goal: userProfile.fiber_goal?.toString() || '30',
+        fiber_goal_type: userProfile.fiber_goal_type || 'target',
         uses_intermittent_fasting: userProfile.uses_intermittent_fasting || false,
         eating_window_start: userProfile.eating_window_start?.slice(0, 5) || '12:00',
         eating_window_end: userProfile.eating_window_end?.slice(0, 5) || '20:00',
@@ -82,6 +86,8 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
         fat_goal_type: formData.fat_goal_type,
         carb_goal: parseInt(formData.carb_goal) || 200,
         carb_goal_type: formData.carb_goal_type,
+        fiber_goal: parseInt(formData.fiber_goal) || 30,
+        fiber_goal_type: formData.fiber_goal_type,
         uses_intermittent_fasting: formData.uses_intermittent_fasting,
         water_goal_cups: parseInt(formData.water_goal_cups) || 8,
         water_serving_oz: parseInt(formData.water_serving_oz) || 8,
@@ -334,6 +340,33 @@ export default function GoalsModal({ userProfile, userId, onClose, onSave }) {
                     id="carb_goal_type"
                     name="carb_goal_type"
                     value={formData.carb_goal_type}
+                    onChange={handleChange}
+                  >
+                    <option value="target">Target (hit this)</option>
+                    <option value="limit">Limit (stay under)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Fiber */}
+              <div className={styles.macroRow}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="fiber_goal">Fiber (g)</label>
+                  <input
+                    id="fiber_goal"
+                    name="fiber_goal"
+                    type="number"
+                    value={formData.fiber_goal}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="fiber_goal_type">Type</label>
+                  <select
+                    id="fiber_goal_type"
+                    name="fiber_goal_type"
+                    value={formData.fiber_goal_type}
                     onChange={handleChange}
                   >
                     <option value="target">Target (hit this)</option>

@@ -20,7 +20,7 @@
   border: 1px solid var(--border);
   border-radius: 20px;
   width: 100%;
-  max-width: 600px;
+  max-width: 680px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
@@ -58,7 +58,7 @@
 }
 
 .closeButton:hover {
-  background: #fdf4f2;
+  background: var(--danger-light);
   border-color: var(--danger);
   color: var(--danger);
 }
@@ -168,6 +168,10 @@
   border-bottom: 1px solid var(--border-light);
   transition: background-color 0.2s;
   color: var(--foreground);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
 .foodItem:last-child {
@@ -189,23 +193,39 @@
   color: var(--foreground-muted);
 }
 
-.selectedFood {
-  padding: 1rem;
+.foodItemContent {
+  min-width: 0;
+}
+
+.addIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
   background: var(--primary-light);
+  color: var(--primary);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.addToListButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--primary);
-  border-radius: 10px;
-  margin-bottom: 1rem;
+  border-radius: 8px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
-.selectedFood strong {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--foreground);
-}
-
-.foodMacros {
-  font-size: 0.85rem;
-  color: var(--foreground-muted);
+.addToListButton:hover {
+  background: var(--primary);
+  color: white;
 }
 
 .customForm {
@@ -216,6 +236,143 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
+}
+
+.batchSection {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--background);
+}
+
+.batchHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.batchHeader h3 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 0.95rem;
+}
+
+.batchHeader p {
+  margin: 0.15rem 0 0;
+  color: var(--foreground-muted);
+  font-size: 0.75rem;
+}
+
+.itemCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.emptyBatch {
+  padding: 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--foreground-muted);
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.batchList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.batchItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--background-card);
+}
+
+.batchItemInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.batchItemInfo strong {
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 0.85rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.batchItemInfo span {
+  color: var(--foreground-muted);
+  font-size: 0.72rem;
+}
+
+.servingsControl {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--foreground-muted);
+  font-size: 0.7rem;
+}
+
+.servingsControl input {
+  width: 64px;
+  padding: 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.removeItemButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--foreground-muted);
+  font-size: 1.2rem;
+}
+
+.removeItemButton:hover {
+  border-color: var(--danger);
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+.mealSettings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.autoHint {
+  color: var(--foreground-muted);
+  font-size: 0.7rem;
 }
 
 .select {
@@ -271,7 +428,7 @@
 
 .error {
   padding: 0.75rem;
-  background: #fdf4f2;
+  background: var(--danger-light);
   border: 1px solid var(--danger);
   border-radius: 8px;
   color: var(--danger);
@@ -341,6 +498,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  width: 100%;
 }
 
 .foodImage {
@@ -397,6 +555,26 @@
 
   .row {
     grid-template-columns: 1fr;
+  }
+
+  .mealSettings {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .batchItem {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .servingsControl {
+    grid-column: 1;
+    grid-row: 2;
+    justify-content: flex-start;
+  }
+
+  .removeItemButton {
+    grid-column: 2;
+    grid-row: 1 / span 2;
   }
 
   .actions {

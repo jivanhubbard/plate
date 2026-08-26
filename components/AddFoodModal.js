@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { searchProducts } from '@/lib/openFoodFacts'
 import { searchBrandedFoods } from '@/lib/usdaFoodData'
@@ -12,10 +12,10 @@ function getMealTypeFromTime(timeStr) {
   const [hour, min] = timeStr.split(':').map(Number)
   const totalMinutes = hour * 60 + min
   
-  // 6:00 AM - 11:59 AM = breakfast
-  if (totalMinutes >= 360 && totalMinutes < 720) return 'breakfast'
-  // 12:00 PM - 2:00 PM = lunch
-  if (totalMinutes >= 720 && totalMinutes < 840) return 'lunch'
+  // 9:00 AM - 10:59 AM = breakfast
+  if (totalMinutes >= 540 && totalMinutes < 660) return 'breakfast'
+  // 11:00 AM - 1:59 PM = lunch
+  if (totalMinutes >= 660 && totalMinutes < 840) return 'lunch'
   // 2:00 PM - 4:59 PM = snack
   if (totalMinutes >= 840 && totalMinutes < 1020) return 'snack'
   // 5:00 PM - 8:00 PM = dinner
@@ -26,8 +26,7 @@ function getMealTypeFromTime(timeStr) {
 
 export default function AddFoodModal({ foods, selectedDate, userId, onClose, onFoodAdded }) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedFood, setSelectedFood] = useState(null)
-  const [servings, setServings] = useState('1')
+  const [pendingItems, setPendingItems] = useState([])
   const [loggedTime, setLoggedTime] = useState(() => {
     // Default to current time
     const now = new Date()
@@ -39,6 +38,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
     const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
     return getMealTypeFromTime(timeStr)
   })
+  const [mealTypeManuallySet, setMealTypeManuallySet] = useState(false)
   const [activeTab, setActiveTab] = useState('my-foods') // 'my-foods', 'brand-search', 'custom'
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -67,6 +67,12 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
     .filter((food, index, self) => 
       index === self.findIndex((f) => f.name.toLowerCase() === food.name.toLowerCase())
     )
+
+  useEffect(() => {
+    if (!mealTypeManuallySet) {
+      setMealType(getMealTypeFromTime(loggedTime))
+    }
+  }, [loggedTime, mealTypeManuallySet])
 
   // Debounced brand search - queries both Open Food Facts AND USDA
   useEffect(() => {
@@ -132,16 +138,106 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
     }
   }, [brandSearchTerm, activeTab])
 
+  const getItemKey = (food, source) => {
+    if (source === 'saved') return `saved-${food.id}`
+    if (source === 'brand') return `brand-${food.fdcId || food.id || food.name}`
+    return `custom-${Date.now()}-${Math.random()}`
+  }
+
+  const addPendingItem = (food, source) => {
+    const itemKey = getItemKey(food, source)
+
+    setPendingItems((items) => {
+      const existingIndex = items.findIndex((item) => item.key === itemKey)
+      if (existingIndex === -1) {
+        return [...items, { key: itemKey, food, source, servings: '1' }]
+      }
+
+      return items.map((item, index) =>
+        index === existingIndex
+          ? { ...item, servings: String((parseFloat(item.servings) || 0) + 1) }
+          : item
+      )
+    })
+    setError(null)
+  }
+
   const handleSelectFood = (food) => {
-    setSelectedFood(food)
+    addPendingItem(food, 'saved')
     setSearchTerm('')
     setBrandSearchTerm('')
   }
 
   const handleSelectBrandFood = (food) => {
-    // Mark as brand food so we know to save it to DB first
-    setSelectedFood({ ...food, isBrandFood: true })
+    addPendingItem(food, 'brand')
     setBrandSearchTerm('')
+  }
+
+  const handleAddCustomFood = () => {
+    if (!customFood.name.trim() || !customFood.serving_size || !customFood.serving_unit.trim() || customFood.calories === '') {
+      setError('Enter a name, serving size, unit, and calories for the custom food')
+      return
+    }
+
+    addPendingItem({ ...customFood, name: customFood.name.trim() }, 'custom')
+    setCustomFood({
+      name: '',
+      serving_size: '1',
+      serving_unit: 'serving',
+      calories: '',
+      protein: '',
+      fat: '',
+      carbs: '',
+      fiber: '',
+    })
+  }
+
+  const updatePendingServings = (key, value) => {
+    setPendingItems((items) =>
+      items.map((item) => item.key === key ? { ...item, servings: value } : item)
+    )
+  }
+
+  const removePendingItem = (key) => {
+    setPendingItems((items) => items.filter((item) => item.key !== key))
+  }
+
+  const resolveFoodId = async (item) => {
+    if (item.source === 'saved') return item.food.id
+
+    if (item.source === 'brand') {
+      const { data: existingFood, error: lookupError } = await supabase
+        .from('foods')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('name', item.food.name)
+        .maybeSingle()
+
+      if (lookupError) throw lookupError
+      if (existingFood) return existingFood.id
+    }
+
+    const food = item.food
+    const { data: newFood, error: foodError } = await supabase
+      .from('foods')
+      .insert({
+        name: food.name,
+        serving_size: food.serving_size,
+        serving_unit: food.serving_unit,
+        calories: parseFloat(food.calories) || 0,
+        protein: parseFloat(food.protein) || 0,
+        fat: parseFloat(food.fat) || 0,
+        carbs: parseFloat(food.carbs) || 0,
+        fiber: parseFloat(food.fiber) || 0,
+        is_custom: true,
+        user_id: userId,
+        usda_fdc_id: item.source === 'brand' ? (food.fdcId || null) : null,
+      })
+      .select('id')
+      .single()
+
+    if (foodError) throw foodError
+    return newFood.id
   }
 
   const handleSubmit = async (e) => {
@@ -150,99 +246,38 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
     setError(null)
 
     try {
-      let foodId = selectedFood?.id
-      let food = selectedFood
-
-      // If creating custom food
-      if (activeTab === 'custom') {
-        const { data: newFood, error: foodError } = await supabase
-          .from('foods')
-          .insert({
-            name: customFood.name,
-            serving_size: customFood.serving_size,
-            serving_unit: customFood.serving_unit,
-            calories: parseFloat(customFood.calories),
-            protein: parseFloat(customFood.protein) || 0,
-            fat: parseFloat(customFood.fat) || 0,
-            carbs: parseFloat(customFood.carbs) || 0,
-            fiber: parseFloat(customFood.fiber) || 0,
-            is_custom: true,
-            user_id: userId,
-          })
-          .select()
-          .single()
-
-        if (foodError) throw foodError
-        foodId = newFood.id
-        food = customFood
-      }
-      // If selecting a brand food, check if it exists first, then save if not
-      else if (selectedFood?.isBrandFood) {
-        // Check if this food already exists for this user (match by name)
-        const { data: existingFood } = await supabase
-          .from('foods')
-          .select('id')
-          .eq('user_id', userId)
-          .eq('name', selectedFood.name)
-          .single()
-
-        if (existingFood) {
-          // Food already exists, use it
-          foodId = existingFood.id
-        } else {
-          // Create new food entry
-          const { data: newFood, error: foodError } = await supabase
-            .from('foods')
-            .insert({
-              name: selectedFood.name,
-              serving_size: selectedFood.serving_size,
-              serving_unit: selectedFood.serving_unit,
-              calories: selectedFood.calories,
-              protein: selectedFood.protein || 0,
-              fat: selectedFood.fat || 0,
-              carbs: selectedFood.carbs || 0,
-              fiber: selectedFood.fiber || 0,
-              is_custom: true,
-              user_id: userId,
-              // Store USDA FDC ID if available for future lookups
-              usda_fdc_id: selectedFood.fdcId || null,
-            })
-            .select()
-            .single()
-
-          if (foodError) throw foodError
-          foodId = newFood.id
-        }
+      if (pendingItems.length === 0) {
+        throw new Error('Add at least one food to the list')
       }
 
-      if (!foodId) {
-        throw new Error('Please select or create a food')
+      const invalidItem = pendingItems.find((item) => !(parseFloat(item.servings) > 0))
+      if (invalidItem) {
+        throw new Error(`Enter a valid serving amount for ${invalidItem.food.name}`)
       }
 
-      const servingsNum = parseFloat(servings) || 1
+      const foodIds = await Promise.all(pendingItems.map(resolveFoodId))
+      const logRows = pendingItems.map((item, index) => {
+        const servingsNum = parseFloat(item.servings)
+        const food = item.food
 
-      // Calculate macros based on servings
-      const calories = (parseFloat(food.calories) || 0) * servingsNum
-      const protein = (parseFloat(food.protein) || 0) * servingsNum
-      const fat = (parseFloat(food.fat) || 0) * servingsNum
-      const carbs = (parseFloat(food.carbs) || 0) * servingsNum
-      const fiber = (parseFloat(food.fiber) || 0) * servingsNum
-
-      const { error: logError } = await supabase
-        .from('food_log')
-        .insert({
+        return {
           user_id: userId,
-          food_id: foodId,
+          food_id: foodIds[index],
           date: selectedDate,
           meal_type: mealType || null,
           servings: servingsNum,
-          calories,
-          protein,
-          fat,
-          carbs,
-          fiber,
-          logged_at: loggedTime + ':00', // Add seconds for TIME format
-        })
+          calories: (parseFloat(food.calories) || 0) * servingsNum,
+          protein: (parseFloat(food.protein) || 0) * servingsNum,
+          fat: (parseFloat(food.fat) || 0) * servingsNum,
+          carbs: (parseFloat(food.carbs) || 0) * servingsNum,
+          fiber: (parseFloat(food.fiber) || 0) * servingsNum,
+          logged_at: loggedTime ? `${loggedTime}:00` : null,
+        }
+      })
+
+      const { error: logError } = await supabase
+        .from('food_log')
+        .insert(logRows)
 
       if (logError) throw logError
 
@@ -258,7 +293,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
     <div className={styles.overlay}>
       <div className={styles.modal}>
         <div className={styles.header}>
-          <h2>Add Food</h2>
+          <h2>Add Foods</h2>
           <button onClick={onClose} className={styles.closeButton} aria-label="Close">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -270,19 +305,22 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
         <div className={styles.tabs}>
           <button
             className={`${styles.tab} ${activeTab === 'my-foods' ? styles.active : ''}`}
-            onClick={() => { setActiveTab('my-foods'); setSelectedFood(null) }}
+            type="button"
+            onClick={() => setActiveTab('my-foods')}
           >
             My Foods
           </button>
           <button
             className={`${styles.tab} ${activeTab === 'brand-search' ? styles.active : ''}`}
-            onClick={() => { setActiveTab('brand-search'); setSelectedFood(null) }}
+            type="button"
+            onClick={() => setActiveTab('brand-search')}
           >
             Brand Search
           </button>
           <button
             className={`${styles.tab} ${activeTab === 'custom' ? styles.active : ''}`}
-            onClick={() => { setActiveTab('custom'); setSelectedFood(null) }}
+            type="button"
+            onClick={() => setActiveTab('custom')}
           >
             Custom
           </button>
@@ -314,12 +352,13 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                         onClick={() => handleSelectFood(food)}
                         className={styles.foodItem}
                       >
-                        <div>
+                        <div className={styles.foodItemContent}>
                           <div className={styles.foodName}>{food.name}</div>
                           <div className={styles.foodDetails}>
                             {food.serving_size} {food.serving_unit} • {food.calories} kcal
                           </div>
                         </div>
+                        <span className={styles.addIcon} aria-hidden="true">+</span>
                       </button>
                     ))}
                   </div>
@@ -375,6 +414,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                               {food.serving_size}{food.serving_unit} • {food.calories} kcal • P:{food.protein}g F:{food.fat}g C:{food.carbs}g Fb:{food.fiber || 0}g
                             </div>
                           </div>
+                          <span className={styles.addIcon} aria-hidden="true">+</span>
                         </div>
                       </button>
                     ))}
@@ -404,7 +444,6 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                   type="text"
                   value={customFood.name}
                   onChange={(e) => setCustomFood({ ...customFood, name: e.target.value })}
-                  required
                   placeholder="e.g., Grilled Chicken Breast"
                 />
               </div>
@@ -417,7 +456,6 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                     step="0.1"
                     value={customFood.serving_size}
                     onChange={(e) => setCustomFood({ ...customFood, serving_size: e.target.value })}
-                    required
                   />
                 </div>
                 <div className={styles.inputGroup}>
@@ -426,7 +464,6 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                     type="text"
                     value={customFood.serving_unit}
                     onChange={(e) => setCustomFood({ ...customFood, serving_unit: e.target.value })}
-                    required
                     placeholder="e.g., cup, oz, g"
                   />
                 </div>
@@ -439,7 +476,6 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                   step="0.1"
                   value={customFood.calories}
                   onChange={(e) => setCustomFood({ ...customFood, calories: e.target.value })}
-                  required
                 />
               </div>
 
@@ -481,35 +517,64 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                   />
                 </div>
               </div>
+
+              <button
+                type="button"
+                onClick={handleAddCustomFood}
+                className={styles.addToListButton}
+              >
+                + Add custom food to list
+              </button>
             </div>
           )}
 
-          {/* Selected food display (for my-foods and brand-search tabs) */}
-          {selectedFood && activeTab !== 'custom' && (
-            <div className={styles.selectedFood}>
-              <strong>{selectedFood.name}</strong>
-              <div className={styles.foodMacros}>
-                {selectedFood.serving_size} {selectedFood.serving_unit}: {selectedFood.calories} kcal, 
-                P: {selectedFood.protein}g, F: {selectedFood.fat}g, C: {selectedFood.carbs}g, Fb: {selectedFood.fiber || 0}g
+          <div className={styles.batchSection}>
+            <div className={styles.batchHeader}>
+              <div>
+                <h3>Foods to add</h3>
+                <p>Select as many foods as you need.</p>
               </div>
-              {selectedFood.isBrandFood && (
-                <div className={styles.brandNote}>This food will be saved to your foods</div>
-              )}
+              <span className={styles.itemCount}>{pendingItems.length}</span>
             </div>
-          )}
 
-          <div className={styles.row}>
-            <div className={styles.inputGroup}>
-              <label>Servings</label>
-              <input
-                type="number"
-                step="0.1"
-                min="0.1"
-                value={servings}
-                onChange={(e) => setServings(e.target.value)}
-                required
-              />
-            </div>
+            {pendingItems.length === 0 ? (
+              <div className={styles.emptyBatch}>Your food list is empty.</div>
+            ) : (
+              <div className={styles.batchList}>
+                {pendingItems.map((item) => (
+                  <div key={item.key} className={styles.batchItem}>
+                    <div className={styles.batchItemInfo}>
+                      <strong>{item.food.name}</strong>
+                      <span>
+                        {Math.round((parseFloat(item.food.calories) || 0) * (parseFloat(item.servings) || 0))} kcal
+                      </span>
+                    </div>
+                    <label className={styles.servingsControl}>
+                      <span>Servings</span>
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="0.1"
+                        value={item.servings}
+                        onChange={(e) => updatePendingServings(item.key, e.target.value)}
+                        aria-label={`Servings for ${item.food.name}`}
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => removePendingItem(item.key)}
+                      className={styles.removeItemButton}
+                      aria-label={`Remove ${item.food.name}`}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className={styles.mealSettings}>
             <div className={styles.inputGroup}>
               <label>Time</label>
               <input
@@ -519,29 +584,39 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                 className={styles.timeInput}
               />
             </div>
-          </div>
 
-          <div className={styles.inputGroup}>
-            <label>Meal Type (optional)</label>
-            <select
-              value={mealType}
-              onChange={(e) => setMealType(e.target.value)}
-              className={styles.select}
-            >
-              <option value="">None</option>
-              <option value="breakfast">Breakfast</option>
-              <option value="lunch">Lunch</option>
-              <option value="dinner">Dinner</option>
-              <option value="snack">Snack</option>
-            </select>
+            <div className={styles.inputGroup}>
+              <label>Meal Type</label>
+              <select
+                value={mealType}
+                onChange={(e) => {
+                  setMealType(e.target.value)
+                  setMealTypeManuallySet(true)
+                }}
+                className={styles.select}
+              >
+                <option value="">None</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+              </select>
+              <span className={styles.autoHint}>
+                {!mealTypeManuallySet && mealType ? 'Auto-selected from time' : 'You can override this'}
+              </span>
+            </div>
           </div>
 
           <div className={styles.actions}>
             <button type="button" onClick={onClose} className={styles.cancelButton}>
               Cancel
             </button>
-            <button type="submit" disabled={loading} className={styles.submitButton}>
-              {loading ? 'Adding...' : 'Add Food'}
+            <button type="submit" disabled={loading || pendingItems.length === 0} className={styles.submitButton}>
+              {loading
+                ? `Adding ${pendingItems.length} food${pendingItems.length === 1 ? '' : 's'}...`
+                : pendingItems.length > 0
+                  ? `Add ${pendingItems.length} food${pendingItems.length === 1 ? '' : 's'}`
+                  : 'Add foods'}
             </button>
           </div>
         </form>

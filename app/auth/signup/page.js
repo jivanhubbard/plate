@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import styles from './page.module.css'
 
@@ -51,6 +52,7 @@ export default function SignupPage() {
     return (
       <div className={styles.container}>
         <div className={styles.card}>
+          <div className={styles.successIcon}>✉️</div>
           <h1 className={styles.title}>Check Your Email</h1>
           <p className={styles.subtitle}>
             We've sent a confirmation link to <strong>{email}</strong>
@@ -58,9 +60,9 @@ export default function SignupPage() {
           <p className={styles.instructions}>
             Click the link in your email to activate your account, then come back here to sign in.
           </p>
-          <a href="/auth/login" className={styles.button} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+          <Link href="/auth/login" className={styles.button} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
             Go to Sign In
-          </a>
+          </Link>
         </div>
       </div>
     )
@@ -69,8 +71,11 @@ export default function SignupPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>Create Account</h1>
-        <p className={styles.subtitle}>Start tracking your meals today</p>
+        <div className={styles.logoArea}>
+          <div className={styles.logo}>🍽</div>
+          <h1 className={styles.title}>Plate</h1>
+        </div>
+        <p className={styles.subtitle}>Create an account and start tracking your meals.</p>
 
         {error && (
           <div className={styles.error}>{error}</div>
@@ -126,12 +131,11 @@ export default function SignupPage() {
 
         <p className={styles.footer}>
           Already have an account?{' '}
-          <a href="/auth/login" className={styles.link}>
+          <Link href="/auth/login" className={styles.link}>
             Sign in
-          </a>
+          </Link>
         </p>
       </div>
     </div>
   )
 }
-

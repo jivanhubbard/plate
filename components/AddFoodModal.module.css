@@ -1,10 +1,13 @@
+/* AddFoodModal - Fresh Pastel Theme */
+
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,13 +16,14 @@
 }
 
 .modal {
-  background: var(--background);
-  border-radius: 12px;
+  background: var(--background-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
 }
 
 .header {
@@ -27,38 +31,41 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .header h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   color: var(--foreground);
+  font-weight: 700;
 }
 
 .closeButton {
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid var(--border);
+  font-size: 1.5rem;
+  color: var(--foreground-muted);
   cursor: pointer;
   padding: 0;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+  border-radius: 10px;
+  transition: all 0.2s;
 }
 
 .closeButton:hover {
-  background: var(--input-bg);
+  background: #fdf4f2;
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
 .tabs {
   display: flex;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .tab {
@@ -67,22 +74,21 @@
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  color: var(--foreground);
-  opacity: 0.7;
+  color: var(--foreground-muted);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: all 0.2s;
 }
 
 .tab.active {
-  opacity: 1;
+  color: var(--foreground);
   border-bottom-color: var(--primary);
   font-weight: 500;
 }
 
 .tab:hover {
-  opacity: 1;
-  background: var(--input-bg);
+  color: var(--foreground);
+  background: var(--primary-light);
 }
 
 .form {
@@ -98,26 +104,39 @@
 }
 
 .inputGroup label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--foreground-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .inputGroup input,
 .inputGroup select {
   padding: 0.75rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--background);
   color: var(--foreground);
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.inputGroup input::placeholder {
+  color: var(--foreground-muted);
+  opacity: 0.6;
 }
 
 .inputGroup input:focus,
 .inputGroup select:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(126, 184, 164, 0.15);
+}
+
+.inputGroup select option {
+  background: var(--background-card);
+  color: var(--foreground);
 }
 
 .searchInput {
@@ -129,14 +148,14 @@
   top: 100%;
   left: 0;
   right: 0;
-  background: var(--background);
+  background: var(--background-card);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 10px;
   max-height: 300px;
   overflow-y: auto;
   z-index: 10;
   margin-top: 0.25rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .foodItem {
@@ -146,8 +165,9 @@
   border: none;
   text-align: left;
   cursor: pointer;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
   transition: background-color 0.2s;
+  color: var(--foreground);
 }
 
 .foodItem:last-child {
@@ -155,26 +175,25 @@
 }
 
 .foodItem:hover {
-  background: var(--input-bg);
+  background: var(--primary-light);
 }
 
 .foodName {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--foreground);
   margin-bottom: 0.25rem;
 }
 
 .foodDetails {
-  font-size: 0.875rem;
-  color: var(--foreground);
-  opacity: 0.7;
+  font-size: 0.8rem;
+  color: var(--foreground-muted);
 }
 
 .selectedFood {
   padding: 1rem;
-  background: var(--input-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  border-radius: 10px;
   margin-bottom: 1rem;
 }
 
@@ -185,9 +204,8 @@
 }
 
 .foodMacros {
-  font-size: 0.875rem;
-  color: var(--foreground);
-  opacity: 0.7;
+  font-size: 0.85rem;
+  color: var(--foreground-muted);
 }
 
 .customForm {
@@ -212,34 +230,38 @@
 }
 
 .cancelButton {
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   background: transparent;
-  color: var(--foreground);
+  color: var(--foreground-muted);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .cancelButton:hover {
-  background: var(--input-bg);
+  background: var(--background);
+  border-color: var(--border);
+  color: var(--foreground);
 }
 
 .submitButton {
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   background: var(--primary);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .submitButton:hover:not(:disabled) {
   background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(126, 184, 164, 0.25);
 }
 
 .submitButton:disabled {
@@ -249,12 +271,12 @@
 
 .error {
   padding: 0.75rem;
-  background: rgba(239, 68, 68, 0.1);
+  background: #fdf4f2;
   border: 1px solid var(--danger);
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--danger);
   margin: 1rem 1.5rem;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
 }
 
 /* Brand Search Styles */
@@ -286,20 +308,18 @@
 }
 
 .searchHint {
-  font-size: 0.8rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  font-size: 0.75rem;
+  color: var(--foreground-muted);
   margin-top: 0.25rem;
 }
 
 .noResults {
   padding: 1rem;
   text-align: center;
-  color: var(--foreground);
-  opacity: 0.7;
-  font-size: 0.9rem;
-  background: var(--input-bg);
-  border-radius: 6px;
+  color: var(--foreground-muted);
+  font-size: 0.85rem;
+  background: var(--background);
+  border-radius: 8px;
   margin-top: 0.5rem;
 }
 
@@ -314,7 +334,7 @@
 }
 
 .linkButton:hover {
-  opacity: 0.8;
+  color: var(--primary-hover);
 }
 
 .brandFoodContent {
@@ -327,22 +347,21 @@
   width: 40px;
   height: 40px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 6px;
   flex-shrink: 0;
+  background: var(--background);
 }
 
 .resultCount {
-  font-size: 0.8rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  font-size: 0.75rem;
+  color: var(--foreground-muted);
   text-align: center;
   margin-top: 0.5rem;
 }
 
 .poweredBy {
-  font-size: 0.75rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  font-size: 0.7rem;
+  color: var(--foreground-muted);
   text-align: center;
   margin-top: 0.5rem;
 }
@@ -357,7 +376,7 @@
 }
 
 .brandNote {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--primary);
   margin-top: 0.5rem;
   font-style: italic;
@@ -365,6 +384,10 @@
 
 .timeInput {
   width: 100%;
+}
+
+.timeInput::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
 }
 
 @media (max-width: 768px) {
@@ -375,5 +398,13 @@
   .row {
     grid-template-columns: 1fr;
   }
-}
 
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .cancelButton,
+  .submitButton {
+    width: 100%;
+  }
+}

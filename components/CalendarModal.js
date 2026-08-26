@@ -89,8 +89,13 @@ export default function CalendarModal({ userId, userProfile, onClose, onSelectDa
     const proteinPct = (totals.protein / goals.protein) * 100
     const caloriePct = (totals.calories / goals.calories) * 100
 
-    if (caloriePct > 110) return 'over'
-    if (proteinPct >= 90 && caloriePct <= 105) return 'success'
+    // Success: within 10% of calorie goal (90-110%) and protein >= 90%
+    if (caloriePct >= 90 && caloriePct <= 110 && proteinPct >= 90) return 'success'
+    // Also success if slightly over calories (up to 115%) but hit protein
+    if (caloriePct > 100 && caloriePct <= 115 && proteinPct >= 90) return 'success'
+    // Over: significantly exceeded calorie goal (>115%)
+    if (caloriePct > 115) return 'over'
+    // Partial: making progress but not quite there
     if (proteinPct >= 70 || caloriePct >= 50) return 'partial'
     return 'low'
   }

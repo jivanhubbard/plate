@@ -1,9 +1,12 @@
+/* WeekView - Fresh Pastel Theme */
+
 .weekView {
-  background: var(--input-bg);
+  background: var(--background-card);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1rem 1.25rem;
   margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px var(--shadow);
 }
 
 .weekHeader {
@@ -14,18 +17,16 @@
 }
 
 .weekLabel {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--foreground);
-  opacity: 0.6;
+  letter-spacing: 0.08em;
+  color: var(--foreground-muted);
 }
 
 .weekRange {
-  font-size: 0.75rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  font-size: 0.7rem;
+  color: var(--foreground-muted);
 }
 
 .daysRow {
@@ -39,7 +40,7 @@
   flex-direction: column;
   align-items: center;
   padding: 0.6rem 0.25rem;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid transparent;
   background: var(--background);
   cursor: pointer;
@@ -50,12 +51,14 @@
 .dayCard:hover:not(:disabled) {
   border-color: var(--primary);
   transform: translateY(-2px);
+  background: var(--primary-light);
 }
 
 .dayCard.selected {
   background: var(--primary);
   color: white;
-  border-color: var(--primary);
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(126, 184, 164, 0.25);
 }
 
 .dayCard.selected .dayName,
@@ -70,16 +73,16 @@
 }
 
 .dayCard.future {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 .dayName {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 500;
-  color: var(--foreground);
-  opacity: 0.6;
+  color: var(--foreground-muted);
   text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .dayNum {
@@ -95,35 +98,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 700;
   margin-top: 0.15rem;
 }
 
 .indicator.perfect {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
+  background: #f3f8f3;
+  color: #6a9b6d;
 }
 
 .indicator.partial {
-  background: rgba(59, 130, 246, 0.2);
-  color: #3b82f6;
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 .indicator.over {
-  background: rgba(245, 158, 11, 0.2);
-  color: #f59e0b;
+  background: #fdf8ef;
+  color: #b5996a;
 }
 
 .indicator.low {
-  background: rgba(156, 163, 175, 0.2);
-  color: #9ca3af;
+  background: var(--background);
+  color: var(--foreground-muted);
 }
 
 .indicator.none {
   background: transparent;
-  color: var(--foreground);
-  opacity: 0.25;
+  color: var(--border);
 }
 
 .selected .indicator {
@@ -139,9 +141,8 @@
 }
 
 .calorieHint {
-  font-size: 0.6rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  font-size: 0.55rem;
+  color: var(--foreground-muted);
 }
 
 .legend {
@@ -150,16 +151,15 @@
   gap: 1rem;
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-light);
 }
 
 .legendItem {
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  font-size: 0.65rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  font-size: 0.6rem;
+  color: var(--foreground-muted);
 }
 
 .legendDot {
@@ -169,28 +169,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.55rem;
+  font-size: 0.5rem;
   font-weight: 700;
 }
 
 .legendDot.perfect {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
+  background: #f3f8f3;
+  color: #6a9b6d;
 }
 
 .legendDot.partial {
-  background: rgba(59, 130, 246, 0.2);
-  color: #3b82f6;
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 .legendDot.over {
-  background: rgba(245, 158, 11, 0.2);
-  color: #f59e0b;
+  background: #fdf8ef;
+  color: #b5996a;
 }
 
 @media (max-width: 480px) {
   .weekView {
     padding: 0.75rem;
+    border-radius: 12px;
   }
 
   .daysRow {
@@ -199,10 +200,11 @@
 
   .dayCard {
     padding: 0.5rem 0.15rem;
+    border-radius: 10px;
   }
 
   .dayName {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
   }
 
   .dayNum {
@@ -212,11 +214,11 @@
   .indicator {
     width: 14px;
     height: 14px;
-    font-size: 0.55rem;
+    font-size: 0.5rem;
   }
 
   .calorieHint {
-    font-size: 0.5rem;
+    font-size: 0.45rem;
   }
 
   .legend {
@@ -224,7 +226,6 @@
   }
 
   .legendItem {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
   }
 }
-

@@ -1,3 +1,5 @@
+/* DarkModeToggle - Theme-aware styling */
+
 .toggle {
   display: flex;
   align-items: center;
@@ -6,7 +8,7 @@
   height: 40px;
   padding: 0;
   background: transparent;
-  color: var(--foreground);
+  color: var(--foreground-muted);
   border: 1px solid var(--border);
   border-radius: 8px;
   cursor: pointer;
@@ -14,11 +16,11 @@
 }
 
 .toggle:hover {
-  background: var(--input-bg);
+  background: var(--primary-light);
   border-color: var(--primary);
+  color: var(--primary);
 }
 
 .toggle:active {
   transform: scale(0.95);
 }
-

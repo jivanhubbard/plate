@@ -1,10 +1,12 @@
+/* AccountModal - Fresh Pastel Theme */
+
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -14,14 +16,14 @@
 }
 
 .modal {
-  background: var(--input-bg);
+  background: var(--background-card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 20px;
   width: 100%;
   max-width: 480px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
 }
 
 .header {
@@ -31,12 +33,12 @@
   padding: 1.5rem 1.5rem 0 1.5rem;
   position: sticky;
   top: 0;
-  background: var(--input-bg);
+  background: var(--background-card);
   z-index: 1;
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   margin: 0;
   color: var(--foreground);
@@ -45,11 +47,11 @@
 .closeButton {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--background);
-  color: var(--foreground);
-  font-size: 1.5rem;
+  color: var(--foreground-muted);
+  font-size: 1.25rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -59,9 +61,9 @@
 }
 
 .closeButton:hover {
-  background: var(--danger);
+  background: var(--danger-light);
   border-color: var(--danger);
-  color: white;
+  color: var(--danger);
 }
 
 .content {
@@ -74,16 +76,15 @@
   gap: 0.25rem;
   padding: 1rem;
   background: var(--background);
-  border-radius: 8px;
+  border-radius: 10px;
   margin-bottom: 1.5rem;
 }
 
 .label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--foreground);
-  opacity: 0.6;
+  letter-spacing: 0.08em;
+  color: var(--foreground-muted);
 }
 
 .email {
@@ -96,7 +97,7 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
   padding-bottom: 0.75rem;
 }
 
@@ -104,27 +105,25 @@
   padding: 0.5rem 0.75rem;
   background: transparent;
   border: none;
-  color: var(--foreground);
-  opacity: 0.6;
-  font-size: 0.875rem;
+  color: var(--foreground-muted);
+  font-size: 0.85rem;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: all 0.2s;
 }
 
 .tab:hover {
-  opacity: 1;
+  color: var(--foreground);
   background: var(--background);
 }
 
 .tabActive {
-  opacity: 1;
-  background: var(--primary);
   color: white;
+  background: var(--primary);
 }
 
 .tabActive:hover {
-  background: var(--primary-hover);
+  background: var(--primary);
 }
 
 .tabDanger.tabActive {
@@ -132,7 +131,7 @@
 }
 
 .tabDanger.tabActive:hover {
-  background: #dc2626;
+  background: #c4716a;
 }
 
 .form {
@@ -142,9 +141,8 @@
 }
 
 .hint {
-  font-size: 0.875rem;
-  color: var(--foreground);
-  opacity: 0.7;
+  font-size: 0.85rem;
+  color: var(--foreground-muted);
   line-height: 1.5;
   margin: 0;
 }
@@ -156,24 +154,27 @@
 }
 
 .inputGroup label {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--foreground-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .inputGroup input {
   padding: 0.75rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--background);
   color: var(--foreground);
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  font-size: 0.95rem;
+  transition: all 0.2s;
 }
 
 .inputGroup input:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(126, 184, 164, 0.15);
 }
 
 .submitButton {
@@ -181,16 +182,18 @@
   background: var(--primary);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   margin-top: 0.5rem;
 }
 
 .submitButton:hover:not(:disabled) {
   background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(126, 184, 164, 0.25);
 }
 
 .submitButton:disabled {
@@ -200,9 +203,9 @@
 
 .dangerZone {
   padding: 1.25rem;
-  background: rgba(239, 68, 68, 0.08);
+  background: var(--danger-light);
   border: 1px solid var(--danger);
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .dangerTitle {
@@ -213,9 +216,8 @@
 }
 
 .dangerText {
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: var(--foreground);
-  opacity: 0.8;
   line-height: 1.5;
   margin: 0 0 1rem 0;
 }
@@ -226,6 +228,7 @@
 
 .dangerInput:focus {
   border-color: var(--danger) !important;
+  box-shadow: 0 0 0 3px rgba(217, 133, 122, 0.15) !important;
 }
 
 .deleteButton {
@@ -234,16 +237,16 @@
   background: var(--danger);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   margin-top: 0.5rem;
 }
 
 .deleteButton:hover:not(:disabled) {
-  background: #dc2626;
+  background: #c4716a;
 }
 
 .deleteButton:disabled {
@@ -253,51 +256,52 @@
 
 .success {
   padding: 0.75rem;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid var(--success);
-  border-radius: 6px;
-  color: var(--success);
-  font-size: 0.875rem;
+  background: var(--bg-fiber);
+  border: 1px solid var(--ring-fiber);
+  border-radius: 8px;
+  color: var(--text-fiber);
+  font-size: 0.85rem;
   margin-bottom: 1rem;
 }
 
 .error {
   padding: 0.75rem;
-  background: rgba(239, 68, 68, 0.1);
+  background: var(--danger-light);
   border: 1px solid var(--danger);
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--danger);
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   margin-bottom: 1rem;
 }
 
 .footer {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-light);
 }
 
 .signOutButton {
   width: 100%;
   padding: 0.75rem;
   background: transparent;
-  color: var(--foreground);
+  color: var(--foreground-muted);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.95rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .signOutButton:hover {
   background: var(--background);
-  border-color: var(--foreground);
+  border-color: var(--border);
+  color: var(--foreground);
 }
 
 @media (max-width: 640px) {
   .modal {
     max-height: 100vh;
-    border-radius: 12px 12px 0 0;
+    border-radius: 16px 16px 0 0;
     margin-top: auto;
   }
 
@@ -311,4 +315,3 @@
     min-width: fit-content;
   }
 }
-

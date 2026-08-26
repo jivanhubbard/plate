@@ -1,20 +1,23 @@
+/* EatingWindowBadge - Fresh Pastel Theme */
+
 .badge {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 1.5rem;
   border: 1px solid var(--border);
+  background: var(--background-card);
 }
 
 .badge.open {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: var(--success);
+  background: var(--bg-snack);
+  border-color: var(--ring-fiber);
 }
 
 .badge.closed {
-  background: var(--input-bg);
+  background: var(--background-card);
   border-color: var(--border);
 }
 
@@ -26,8 +29,7 @@
 }
 
 .badge.open .indicator {
-  background: var(--success);
-  box-shadow: 0 0 8px var(--success);
+  background: var(--ring-fiber);
   animation: pulse 2s infinite;
 }
 
@@ -59,14 +61,12 @@
 
 .time {
   font-size: 0.75rem;
-  color: var(--foreground);
-  opacity: 0.7;
+  color: var(--foreground-muted);
 }
 
 .window {
   font-size: 0.75rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  color: var(--foreground-muted);
   white-space: nowrap;
 }
 
@@ -81,4 +81,3 @@
     padding-left: 1.5rem;
   }
 }
-

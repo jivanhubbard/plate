@@ -1,0 +1,30 @@
+.authContainer {
+  min-height: 100vh;
+  background: var(--background);
+  position: relative;
+  overflow: hidden;
+}
+
+.blob1 {
+  position: absolute;
+  top: -150px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: #d1e8e0;
+  border-radius: 50% 50% 50% 70% / 50% 50% 70% 60%;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.blob2 {
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: #f0e4d8;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  opacity: 0.4;
+  z-index: 0;
+}

@@ -204,6 +204,8 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
               fiber: selectedFood.fiber || 0,
               is_custom: true,
               user_id: userId,
+              // Store USDA FDC ID if available for future lookups
+              usda_fdc_id: selectedFood.fdcId || null,
             })
             .select()
             .single()

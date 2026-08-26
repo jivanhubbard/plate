@@ -1,10 +1,12 @@
+/* CalendarModal - Fresh Pastel Theme */
+
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -14,16 +16,16 @@
 }
 
 .modal {
-  background: var(--input-bg);
+  background: var(--background-card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 20px;
   width: 100%;
   max-width: 420px;
   max-height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
 }
 
 .header {
@@ -31,11 +33,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--foreground);
   margin: 0;
@@ -44,10 +46,10 @@
 .closeButton {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--background);
-  color: var(--foreground);
+  color: var(--foreground-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -56,9 +58,9 @@
 }
 
 .closeButton:hover {
-  background: var(--danger);
+  background: var(--danger-light);
   border-color: var(--danger);
-  color: white;
+  color: var(--danger);
 }
 
 .content {
@@ -74,7 +76,7 @@
 }
 
 .monthTitle {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: var(--foreground);
   margin: 0;
@@ -83,18 +85,19 @@
 .navButton {
   width: 32px;
   height: 32px;
-  background: transparent;
-  color: var(--foreground);
+  background: var(--background);
+  color: var(--foreground-muted);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
   font-size: 1rem;
 }
 
 .navButton:hover {
-  background: var(--background);
+  background: var(--primary-light);
   border-color: var(--primary);
+  color: var(--primary);
 }
 
 .legend {
@@ -108,9 +111,8 @@
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.75rem;
-  color: var(--foreground);
-  opacity: 0.7;
+  font-size: 0.7rem;
+  color: var(--foreground-muted);
 }
 
 .legendDot {
@@ -120,11 +122,11 @@
 }
 
 .legendDot.success {
-  background: var(--success);
+  background: var(--ring-fiber);
 }
 
 .legendDot.partial {
-  background: var(--warning);
+  background: var(--ring-carbs);
 }
 
 .legendDot.over {
@@ -134,31 +136,31 @@
 .loading {
   text-align: center;
   padding: 2rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  color: var(--foreground-muted);
 }
 
 .calendar {
   background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
   overflow: hidden;
 }
 
 .weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  background: var(--input-bg);
-  border-bottom: 1px solid var(--border);
+  background: var(--background-card);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .weekday {
   padding: 0.5rem;
   text-align: center;
   font-weight: 600;
-  font-size: 0.7rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  font-size: 0.65rem;
+  color: var(--foreground-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .days {
@@ -169,9 +171,9 @@
 .day {
   aspect-ratio: 1;
   padding: 0.25rem;
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: var(--background);
+  border-right: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  background: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -192,27 +194,27 @@
 }
 
 .day.hasDay:hover {
-  background: var(--input-bg);
+  background: var(--primary-light);
 }
 
 .day.success {
-  background: rgba(16, 185, 129, 0.15);
+  background: var(--bg-fiber);
 }
 
 .day.partial {
-  background: rgba(245, 158, 11, 0.15);
+  background: var(--bg-carbs);
 }
 
 .day.over {
-  background: rgba(239, 68, 68, 0.15);
+  background: var(--danger-light);
 }
 
 .day.low {
-  background: var(--background);
+  background: transparent;
 }
 
 .day.empty {
-  background: var(--input-bg);
+  background: var(--background);
   opacity: 0.4;
 }
 
@@ -223,9 +225,8 @@
 }
 
 .dayStats {
-  font-size: 0.55rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  font-size: 0.5rem;
+  color: var(--foreground-muted);
   margin-top: 0.1rem;
 }
 
@@ -247,4 +248,3 @@
     display: none;
   }
 }
-

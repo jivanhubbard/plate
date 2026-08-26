@@ -1,10 +1,12 @@
+/* AnalyticsModal - Fresh Pastel Theme */
+
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -14,16 +16,16 @@
 }
 
 .modal {
-  background: var(--input-bg);
+  background: var(--background-card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 20px;
   width: 100%;
   max-width: 480px;
   max-height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
 }
 
 .header {
@@ -31,11 +33,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--foreground);
   margin: 0;
@@ -44,10 +46,10 @@
 .closeButton {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--background);
-  color: var(--foreground);
+  color: var(--foreground-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -56,9 +58,9 @@
 }
 
 .closeButton:hover {
-  background: var(--danger);
+  background: #fdf4f2;
   border-color: var(--danger);
-  color: white;
+  color: var(--danger);
 }
 
 .content {
@@ -69,8 +71,7 @@
 .loading {
   text-align: center;
   padding: 2rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  color: var(--foreground-muted);
 }
 
 .section {
@@ -82,13 +83,12 @@
 }
 
 .sectionTitle {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--foreground);
+  color: var(--foreground-muted);
   margin: 0 0 0.75rem 0;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  opacity: 0.7;
+  letter-spacing: 0.08em;
 }
 
 .statsGrid {
@@ -99,8 +99,8 @@
 
 .statCard {
   background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
   padding: 0.75rem 0.5rem;
   text-align: center;
   display: flex;
@@ -109,11 +109,11 @@
 }
 
 .statLabel {
-  font-size: 0.65rem;
-  font-weight: 500;
+  font-size: 0.6rem;
+  font-weight: 600;
   text-transform: uppercase;
-  color: var(--foreground);
-  opacity: 0.5;
+  letter-spacing: 0.05em;
+  color: var(--foreground-muted);
 }
 
 .statValue {
@@ -123,13 +123,12 @@
 }
 
 .statHint {
-  font-size: 0.6rem;
-  color: var(--foreground);
-  opacity: 0.4;
+  font-size: 0.55rem;
+  color: var(--foreground-muted);
 }
 
 .setupHint {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--primary);
   margin: 0.75rem 0 0 0;
   text-align: center;
@@ -137,9 +136,9 @@
 
 /* Projection Card */
 .projectionCard {
-  background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  border-radius: 12px;
   padding: 1rem;
   text-align: center;
   margin-bottom: 1rem;
@@ -153,8 +152,7 @@
 
 .projectionLabel {
   font-size: 0.75rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  color: var(--foreground-muted);
 }
 
 .projectionValue {
@@ -165,8 +163,7 @@
 
 .projectionArrow {
   font-size: 1.25rem;
-  color: var(--foreground);
-  opacity: 0.3;
+  color: var(--border);
   margin: 0.5rem 0;
 }
 
@@ -185,8 +182,8 @@
   height: 70px;
   gap: 0.25rem;
   background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
   padding: 0.75rem 0.5rem 0.5rem;
 }
 
@@ -200,22 +197,21 @@
 
 .chartBarFill {
   width: 100%;
-  background: linear-gradient(to top, var(--primary), rgba(37, 99, 235, 0.4));
+  background: linear-gradient(to top, var(--secondary), rgba(181, 168, 201, 0.3));
   border-radius: 3px 3px 0 0;
   min-height: 4px;
 }
 
 .chartBarFillGreen {
   width: 100%;
-  background: linear-gradient(to top, #10b981, rgba(16, 185, 129, 0.4));
+  background: linear-gradient(to top, var(--primary), rgba(126, 184, 164, 0.3));
   border-radius: 3px 3px 0 0;
   min-height: 4px;
 }
 
 .chartLabel {
-  font-size: 0.55rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  font-size: 0.5rem;
+  color: var(--foreground-muted);
   margin-top: 0.25rem;
 }
 
@@ -228,18 +224,18 @@
 }
 
 .positive {
-  color: #10b981;
+  color: #6a9b6d;
 }
 
 .negative {
-  color: #ef4444;
+  color: var(--danger);
 }
 
 /* Banners */
 .successBanner {
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid #10b981;
-  border-radius: 8px;
+  background: #f3f8f3;
+  border: 1px solid #95b896;
+  border-radius: 10px;
   padding: 1rem;
   text-align: center;
   color: var(--foreground);
@@ -247,36 +243,35 @@
 }
 
 .warningBanner {
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid #f59e0b;
-  border-radius: 8px;
+  background: #fdf8ef;
+  border: 1px solid #e5c08d;
+  border-radius: 10px;
   padding: 0.75rem;
   text-align: center;
   color: var(--foreground);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   margin-bottom: 1rem;
 }
 
 /* Ketosis styles */
 .ketosis_likely {
-  border-color: #10b981 !important;
-  background: rgba(16, 185, 129, 0.15) !important;
+  border-color: #95b896 !important;
+  background: #f3f8f3 !important;
 }
 
 .ketosis_possible {
-  border-color: #f59e0b !important;
-  background: rgba(245, 158, 11, 0.15) !important;
+  border-color: #e5c08d !important;
+  background: #fdf8ef !important;
 }
 
 .daysNote {
-  font-size: 0.7rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  font-size: 0.65rem;
+  color: var(--foreground-muted);
   text-align: center;
   margin: 0.5rem 0 0 0;
 }
 
-/* Tooltips - appear BELOW to avoid overflow clipping */
+/* Tooltips */
 .tooltipWrapper {
   position: relative;
   display: inline-block;
@@ -290,11 +285,11 @@
   top: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
-  background: #1a1a2e;
+  background: var(--foreground);
   color: #fff;
   padding: 0.5rem 0.65rem;
-  border-radius: 6px;
-  font-size: 0.7rem;
+  border-radius: 8px;
+  font-size: 0.65rem;
   font-weight: 400;
   line-height: 1.35;
   width: max-content;
@@ -302,11 +297,11 @@
   text-align: center;
   z-index: 10000;
   transition: opacity 0.15s ease;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   pointer-events: none;
+  border: 1px solid var(--border);
 }
 
-/* Arrow pointing UP */
 .tooltip::before {
   content: '';
   position: absolute;
@@ -314,7 +309,7 @@
   left: 50%;
   transform: translateX(-50%);
   border: 6px solid transparent;
-  border-bottom-color: #1a1a2e;
+  border-bottom-color: var(--foreground);
 }
 
 .tooltipWrapper:hover .tooltip {
@@ -322,7 +317,6 @@
   opacity: 1;
 }
 
-/* Stat card tooltip wrapper fix */
 .statsGrid .tooltipWrapper {
   display: flex;
   position: relative;
@@ -332,7 +326,6 @@
   width: 100%;
 }
 
-/* Ensure tooltips in stats grid don't get cut off on edges */
 .statsGrid .tooltipWrapper:first-child .tooltip {
   left: 0;
   transform: translateX(0);
@@ -355,7 +348,6 @@
   transform: translateX(0);
 }
 
-/* Section title tooltips - keep them inline */
 .sectionTitle .tooltipWrapper {
   display: inline;
 }
@@ -364,34 +356,29 @@
   white-space: normal;
 }
 
-/* Projection note */
 .projectionNote {
-  font-size: 0.7rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  font-size: 0.65rem;
+  color: var(--foreground-muted);
   margin: 0.5rem 0 0 0;
 }
 
-/* Ketosis explainer */
 .ketosisExplainer {
-  font-size: 0.75rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  font-size: 0.7rem;
+  color: var(--foreground-muted);
   margin: 0.75rem 0 0 0;
   text-align: center;
   line-height: 1.4;
 }
 
-/* Weight period text */
 .weightPeriod {
-  font-size: 0.7rem;
-  opacity: 0.5;
+  font-size: 0.65rem;
+  opacity: 0.6;
 }
 
 /* Tips Section */
 .tipsSection {
   background: var(--background);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-light);
   border-radius: 10px;
   padding: 1rem;
   margin-top: 0.5rem;
@@ -400,9 +387,8 @@
 .tipsList {
   margin: 0;
   padding: 0 0 0 1.25rem;
-  font-size: 0.75rem;
-  color: var(--foreground);
-  opacity: 0.7;
+  font-size: 0.7rem;
+  color: var(--foreground-muted);
   line-height: 1.6;
 }
 
@@ -428,4 +414,3 @@
     font-size: 1rem;
   }
 }
-

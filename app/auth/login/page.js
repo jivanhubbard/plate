@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
 import styles from './page.module.css'
 
 export default function LoginPage() {
@@ -37,8 +38,11 @@ export default function LoginPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>Welcome Back</h1>
-        <p className={styles.subtitle}>Sign in to track your meals</p>
+        <div className={styles.logoArea}>
+          <div className={styles.logo}>🍽</div>
+          <h1 className={styles.title}>Plate</h1>
+        </div>
+        <p className={styles.subtitle}>Welcome back. Sign in to track your meals.</p>
 
         {error && (
           <div className={styles.error}>{error}</div>
@@ -80,12 +84,11 @@ export default function LoginPage() {
 
         <p className={styles.footer}>
           Don't have an account?{' '}
-          <a href="/auth/signup" className={styles.link}>
+          <Link href="/auth/signup" className={styles.link}>
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </div>
   )
 }
-

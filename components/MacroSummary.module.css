@@ -1,70 +1,166 @@
+/* MacroSummary - Fresh Pastel Theme */
+
 .container {
-  margin-bottom: 2rem;
-}
-
-.title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--foreground);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.macroCard {
-  padding: 1rem;
-  background: var(--input-bg);
+  padding: 1.5rem;
+  background: var(--background-card);
+  border-radius: 20px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 12px var(--shadow);
 }
 
-.macroHeader {
+/* Main Calories Section */
+.caloriesSection {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-light);
 }
 
-.label {
+.caloriesRing {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.375rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.caloriesText {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.caloriesNumber {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.caloriesLabel {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--foreground-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 0.35rem;
+}
+
+.caloriesInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.caloriesLeft {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.caloriesGoal {
+  font-size: 0.8rem;
+  color: var(--foreground-muted);
+}
+
+/* Macro Rings Grid */
+.macroGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.macroItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.macroRingWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.macroValue {
+  position: absolute;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 1px;
+}
+
+.macroNumber {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1;
+}
+
+.macroUnit {
+  font-size: 0.65rem;
   font-weight: 500;
+  color: var(--foreground-muted);
+}
+
+.macroLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
   color: var(--foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.15rem;
 }
 
-.goalType {
-  font-size: 0.75rem;
-  opacity: 0.5;
+.macroGoal {
+  font-size: 0.65rem;
+  color: var(--foreground-muted);
 }
 
-.amount {
-  font-size: 0.875rem;
-  color: var(--foreground);
-  opacity: 0.7;
+/* SVG Ring Styles */
+.ringSvg {
+  transform: rotate(-90deg);
 }
 
-.progressBar {
-  width: 100%;
-  height: 8px;
-  background: var(--border);
-  border-radius: 4px;
-  overflow: hidden;
+.progressCircle {
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.progressFill {
-  height: 100%;
-  transition: width 0.3s ease;
-  border-radius: 4px;
-}
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .container {
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
 
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
+  .caloriesNumber {
+    font-size: 2rem;
+  }
+
+  .macroGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+  }
+
+  .macroRingWrapper {
+    transform: scale(0.85);
+  }
+
+  .macroLabel {
+    font-size: 0.6rem;
+  }
+
+  .macroGoal {
+    font-size: 0.55rem;
   }
 }
-

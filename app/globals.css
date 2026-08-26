@@ -1,51 +1,163 @@
+/* ===== PLATE APP DESIGN SYSTEM ===== */
+/* Fresh Pastel Theme - Calming, Health-Focused Design */
+
 :root,
 [data-theme="light"] {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --danger-light: #fca5a5;
-  --progress-blue: #3b82f6;
-  --border: #e5e7eb;
-  --input-bg: #f9fafb;
-  /* Meal type colors - darker for light mode contrast */
-  --meal-breakfast: #d97706;
-  --meal-lunch: #0891b2;
-  --meal-dinner: #7c3aed;
-  --meal-snack: #16a34a;
+  /* Base colors - Warm light background */
+  --background: #faf8f4;
+  --background-card: #ffffff;
+  --background-elevated: #ffffff;
+  --foreground: #3d3d3d;
+  --foreground-muted: #7a7a7a;
+  
+  /* Primary accent - Soft sage green */
+  --primary: #7eb8a4;
+  --primary-hover: #6aa692;
+  --primary-light: #e8f3ef;
+  
+  /* Secondary accent */
+  --secondary: #b5a8c9;
+  --secondary-hover: #a395b8;
+  --secondary-light: #f4f1f8;
+  
+  /* Macro ring colors - Soft pastels */
+  --ring-calories: #e8a598;
+  --ring-protein: #b5a8c9;
+  --ring-carbs: #e5c08d;
+  --ring-fat: #8ec0c4;
+  --ring-fiber: #95b896;
+  
+  /* Macro background tints */
+  --bg-calories: #fdf4f2;
+  --bg-protein: #f7f4fa;
+  --bg-carbs: #fdf8ef;
+  --bg-fat: #f1f8f8;
+  --bg-fiber: #f3f8f3;
+  
+  /* Macro text colors - good contrast */
+  --text-calories: #a05a4f;
+  --text-protein: #6b5f7e;
+  --text-carbs: #8a7345;
+  --text-fat: #4a7578;
+  --text-fiber: #4a7a4d;
+  
+  /* Status colors - Muted */
+  --success: #7eb8a4;
+  --warning: #e5c08d;
+  --danger: #d9857a;
+  --danger-light: #f5d4cf;
+  
+  /* UI elements */
+  --border: #e8e4de;
+  --border-light: #f2efe9;
+  --input-bg: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.06);
+  --shadow-elevated: 0 4px 20px rgba(0, 0, 0, 0.08);
+  
+  /* Meal type colors - Soft pastels */
+  --meal-breakfast: #f0c97d;
+  --meal-lunch: #89b9d0;
+  --meal-dinner: #b5a8c9;
+  --meal-snack: #95b896;
+  
+  /* Meal type text (good contrast) */
+  --text-breakfast: #9a7a3d;
+  --text-lunch: #4a7a8a;
+  --text-dinner: #6b5f7e;
+  --text-snack: #4a7a4d;
+  
+  /* Meal type backgrounds */
+  --bg-breakfast: #fdf8ef;
+  --bg-lunch: #f0f7fa;
+  --bg-dinner: #f7f4fa;
+  --bg-snack: #f3f8f3;
+  
   /* Water color */
-  --water: #0284c7;
-  --water-light: #bae6fd;
-  --water-muted: #94a3b8;
+  --water: #89b9d0;
+  --water-light: rgba(137, 185, 208, 0.15);
+  
   color-scheme: light;
 }
 
+/* Dark Mode - Muted, restful dark theme */
 [data-theme="dark"] {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --danger-light: #f87171;
-  --progress-blue: #60a5fa;
-  --border: #374151;
-  --input-bg: #1f2937;
-  /* Meal type colors - lighter for dark mode */
-  --meal-breakfast: #f59e0b;
-  --meal-lunch: #06b6d4;
-  --meal-dinner: #8b5cf6;
-  --meal-snack: #22c55e;
+  /* Base colors - Deep, muted background */
+  --background: #1a1d21;
+  --background-card: #242830;
+  --background-elevated: #2d323a;
+  --foreground: #e8e6e3;
+  --foreground-muted: #9a9590;
+  
+  /* Primary accent - Soft sage green (slightly brighter for dark) */
+  --primary: #8ac4af;
+  --primary-hover: #9dd1bc;
+  --primary-light: rgba(138, 196, 175, 0.15);
+  
+  /* Secondary accent */
+  --secondary: #c4b8d8;
+  --secondary-hover: #d4c9e6;
+  --secondary-light: rgba(196, 184, 216, 0.15);
+  
+  /* Macro ring colors - Slightly more saturated for dark bg */
+  --ring-calories: #e8a598;
+  --ring-protein: #c4b8d8;
+  --ring-carbs: #e5c08d;
+  --ring-fat: #8ec0c4;
+  --ring-fiber: #9dc49f;
+  
+  /* Macro background tints - Dark versions */
+  --bg-calories: rgba(232, 165, 152, 0.12);
+  --bg-protein: rgba(196, 184, 216, 0.12);
+  --bg-carbs: rgba(229, 192, 141, 0.12);
+  --bg-fat: rgba(142, 192, 196, 0.12);
+  --bg-fiber: rgba(157, 196, 159, 0.12);
+  
+  /* Macro text colors - brighter for dark bg */
+  --text-calories: #e8a598;
+  --text-protein: #c4b8d8;
+  --text-carbs: #e5c08d;
+  --text-fat: #8ec0c4;
+  --text-fiber: #9dc49f;
+  
+  /* Status colors */
+  --success: #8ac4af;
+  --warning: #e5c08d;
+  --danger: #e09080;
+  --danger-light: rgba(224, 144, 128, 0.2);
+  
+  /* UI elements */
+  --border: #3a3f48;
+  --border-light: #2d323a;
+  --input-bg: #242830;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-elevated: 0 4px 20px rgba(0, 0, 0, 0.4);
+  
+  /* Meal type colors */
+  --meal-breakfast: #e5c08d;
+  --meal-lunch: #8ec0c4;
+  --meal-dinner: #c4b8d8;
+  --meal-snack: #9dc49f;
+  
+  /* Meal type text (brighter for dark bg) */
+  --text-breakfast: #e5c08d;
+  --text-lunch: #8ec0c4;
+  --text-dinner: #c4b8d8;
+  --text-snack: #9dc49f;
+  
+  /* Meal type backgrounds */
+  --bg-breakfast: rgba(229, 192, 141, 0.12);
+  --bg-lunch: rgba(142, 192, 196, 0.12);
+  --bg-dinner: rgba(196, 184, 216, 0.12);
+  --bg-snack: rgba(157, 196, 159, 0.12);
+  
   /* Water color */
-  --water: #38bdf8;
-  --water-light: #0c4a6e;
-  --water-muted: #475569;
+  --water: #8ec0c4;
+  --water-light: rgba(142, 192, 196, 0.15);
+  
   color-scheme: dark;
 }
+
+/* ===== GLOBAL RESETS ===== */
 
 * {
   box-sizing: border-box;
@@ -62,11 +174,12 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
 }
 
 a {
@@ -81,5 +194,9 @@ button {
 
 input, textarea, select {
   font-family: inherit;
-  }
+}
 
+/* ===== UTILITY CLASSES ===== */
+.gradient-text {
+  color: var(--primary);
+}

@@ -1,10 +1,12 @@
+/* GoalsModal - Fresh Pastel Theme */
+
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -14,14 +16,14 @@
 }
 
 .modal {
-  background: var(--input-bg);
+  background: var(--background-card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 20px;
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
 }
 
 .header {
@@ -31,12 +33,12 @@
   padding: 1.5rem 1.5rem 0 1.5rem;
   position: sticky;
   top: 0;
-  background: var(--input-bg);
+  background: var(--background-card);
   z-index: 1;
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   margin: 0;
   color: var(--foreground);
@@ -45,11 +47,11 @@
 .closeButton {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--background);
-  color: var(--foreground);
-  font-size: 1.5rem;
+  color: var(--foreground-muted);
+  font-size: 1.25rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -59,9 +61,9 @@
 }
 
 .closeButton:hover {
-  background: var(--danger);
+  background: #fdf4f2;
   border-color: var(--danger);
-  color: white;
+  color: var(--danger);
 }
 
 .content {
@@ -69,10 +71,10 @@
 }
 
 .subtitle {
-  color: var(--foreground);
-  opacity: 0.7;
+  color: var(--foreground-muted);
   margin-bottom: 1.5rem;
   line-height: 1.5;
+  font-size: 0.9rem;
 }
 
 .form {
@@ -83,7 +85,7 @@
 
 .section {
   padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .section:last-of-type {
@@ -92,16 +94,15 @@
 }
 
 .sectionTitle {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: var(--foreground);
 }
 
 .sectionHint {
-  font-size: 0.8rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  font-size: 0.75rem;
+  color: var(--foreground-muted);
   margin-bottom: 1rem;
 }
 
@@ -123,26 +124,34 @@
 }
 
 .inputGroup label {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--foreground-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .inputGroup input,
 .inputGroup select {
   padding: 0.625rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--background);
   color: var(--foreground);
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
+  font-size: 0.9rem;
+  transition: all 0.2s;
 }
 
 .inputGroup input:focus,
 .inputGroup select:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(126, 184, 164, 0.15);
+}
+
+.inputGroup select option {
+  background: var(--background-card);
+  color: var(--foreground);
 }
 
 .row {
@@ -192,14 +201,14 @@
   width: 20px;
   left: 3px;
   bottom: 3px;
-  background-color: var(--background);
+  background-color: #ffffff;
   border-radius: 50%;
   transition: 0.3s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .toggle input:checked + .toggleSlider {
-  background-color: var(--primary);
+  background: var(--primary);
 }
 
 .toggle input:checked + .toggleSlider::before {
@@ -219,34 +228,38 @@
 }
 
 .cancelButton {
-  padding: 0.625rem 1.25rem;
+  padding: 0.75rem 1.25rem;
   background: transparent;
-  color: var(--foreground);
+  color: var(--foreground-muted);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.95rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .cancelButton:hover {
   background: var(--background);
+  border-color: var(--border);
+  color: var(--foreground);
 }
 
 .submitButton {
-  padding: 0.625rem 1.25rem;
+  padding: 0.75rem 1.25rem;
   background: var(--primary);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .submitButton:hover:not(:disabled) {
   background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(126, 184, 164, 0.25);
 }
 
 .submitButton:disabled {
@@ -256,18 +269,18 @@
 
 .error {
   padding: 0.75rem;
-  background: rgba(239, 68, 68, 0.1);
+  background: #fdf4f2;
   border: 1px solid var(--danger);
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--danger);
   margin-bottom: 1rem;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
 }
 
 @media (max-width: 640px) {
   .modal {
     max-height: 100vh;
-    border-radius: 12px 12px 0 0;
+    border-radius: 16px 16px 0 0;
     margin-top: auto;
   }
 
@@ -288,4 +301,3 @@
     width: 100%;
   }
 }
-

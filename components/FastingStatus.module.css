@@ -1,17 +1,19 @@
+/* FastingStatus - Fresh Pastel Theme */
+
 .container {
   display: flex;
   align-items: center;
   gap: 1.5rem;
   padding: 1rem 1.25rem;
-  background: var(--input-bg);
+  background: var(--background-card);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px var(--shadow);
 }
 
 .loading {
-  color: var(--foreground);
-  opacity: 0.6;
+  color: var(--foreground-muted);
   font-size: 0.875rem;
   padding: 0.5rem 0;
 }
@@ -45,7 +47,7 @@
 
 .circleFill {
   fill: none;
-  stroke: var(--primary);
+  stroke: var(--secondary);
   stroke-width: 3;
   stroke-linecap: round;
   transition: stroke-dasharray 0.5s ease;
@@ -73,20 +75,17 @@
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--foreground);
-  opacity: 0.8;
 }
 
 .unit {
   font-size: 0.5rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  color: var(--foreground-muted);
   font-weight: 500;
 }
 
 .noData {
   font-size: 1.25rem;
-  color: var(--foreground);
-  opacity: 0.4;
+  color: var(--border);
 }
 
 .fastingLabel {
@@ -96,15 +95,14 @@
 }
 
 .labelTitle {
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--foreground);
 }
 
 .labelHint {
   font-size: 0.75rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  color: var(--foreground-muted);
 }
 
 /* Divider */
@@ -135,18 +133,17 @@
 }
 
 .ketosisIcon.ketosis_likely {
-  background: rgba(239, 68, 68, 0.1);
+  background: #fdf4f2;
 }
 
 .ketosisIcon.ketosis_possible {
-  background: rgba(245, 158, 11, 0.1);
+  background: #fdf8ef;
 }
 
 .ketosisIcon.ketosis_unlikely,
 .ketosisIcon.ketosis_none,
 .ketosisIcon.ketosis_unknown {
   background: var(--background);
-  color: var(--foreground);
   opacity: 0.5;
 }
 
@@ -157,15 +154,14 @@
 }
 
 .ketosisStatus {
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--foreground);
 }
 
 .ketosisDetail {
   font-size: 0.75rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  color: var(--foreground-muted);
 }
 
 /* Mobile Responsive */
@@ -186,4 +182,3 @@
     height: 1px;
   }
 }
-

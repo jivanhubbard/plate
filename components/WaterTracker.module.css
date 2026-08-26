@@ -1,16 +1,18 @@
+/* WaterTracker - Fresh Pastel Theme */
+
 .container {
-  background: var(--input-bg);
+  background: var(--background-card);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px var(--shadow);
 }
 
 .loading {
   text-align: center;
   padding: 1rem;
-  color: var(--foreground);
-  opacity: 0.5;
+  color: var(--foreground-muted);
   font-size: 0.875rem;
 }
 
@@ -25,10 +27,12 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--foreground);
   margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .titleIcon {
@@ -36,9 +40,8 @@
 }
 
 .stats {
-  font-size: 0.875rem;
-  color: var(--foreground);
-  opacity: 0.6;
+  font-size: 0.8rem;
+  color: var(--foreground-muted);
 }
 
 .drops {
@@ -69,32 +72,19 @@
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-/* Empty drop hover - subtle opacity change instead of color */
 .drop:not(.filled):hover {
   transform: scale(1.15);
-  opacity: 0.6;
+  color: var(--water);
+  opacity: 0.5;
 }
 
-.drop:not(.filled):hover svg {
-  filter: none;
-}
-
-/* Filled drop hover */
 .drop.filled:hover {
   transform: scale(1.15);
-}
-
-.drop.filled:hover svg {
-  filter: drop-shadow(0 0 8px var(--water-light));
 }
 
 .drop.filled {
   color: var(--water);
   animation: fillDrop 0.3s ease;
-}
-
-.drop.filled svg {
-  filter: drop-shadow(0 2px 8px var(--water-light));
 }
 
 @keyframes fillDrop {
@@ -113,9 +103,10 @@
   width: 32px;
   height: 32px;
   padding: 0;
-  border: 2px dashed var(--water-muted);
+  border: 2px dashed var(--water);
+  opacity: 0.4;
   background: transparent;
-  color: var(--water-muted);
+  color: var(--water);
   cursor: pointer;
   border-radius: 50%;
   transition: all 0.2s ease;
@@ -126,8 +117,6 @@
 
 .addMore:hover {
   opacity: 1;
-  border-color: var(--water);
-  color: var(--water);
   transform: scale(1.1);
 }
 
@@ -149,4 +138,3 @@
     gap: 0.4rem;
   }
 }
-

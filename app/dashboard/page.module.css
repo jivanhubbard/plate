@@ -1,3 +1,5 @@
+/* Dashboard - Fresh Pastel Theme */
+
 .container {
   min-height: 100vh;
   background: var(--background);
@@ -8,29 +10,52 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
+  padding: 1.25rem 2rem;
+  background: var(--background-card);
   border-bottom: 1px solid var(--border);
-  background: var(--input-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px var(--shadow);
 }
 
 .title {
   font-size: 1.5rem;
   font-weight: 700;
+  color: var(--primary);
   margin: 0;
-  color: var(--foreground);
 }
 
 .subtitle {
-  font-size: 0.875rem;
-  color: var(--foreground);
-  opacity: 0.7;
-  margin: 0.25rem 0 0 0;
+  font-size: 0.75rem;
+  color: var(--foreground-muted);
+  margin: 0.15rem 0 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
+}
+
+.navLink {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--foreground-muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.navLink:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 /* Hamburger menu button - hidden on desktop */
@@ -76,11 +101,11 @@
   top: 100%;
   right: 0;
   left: 0;
-  background: var(--input-bg);
+  background: var(--background-card);
   border-bottom: 1px solid var(--border);
   padding: 0.5rem 0;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-elevated);
 }
 
 .mobileNavLink {
@@ -99,88 +124,73 @@
 }
 
 .mobileNavLink:hover {
-  background: var(--background);
+  background: var(--primary-light);
 }
 
 .mobileNavLink svg {
-  opacity: 0.7;
-}
-
-.navLink {
-  padding: 0.5rem 1rem;
-  background: transparent;
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.875rem;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.navLink:hover {
-  background: var(--input-bg);
-  border-color: var(--primary);
-}
-
-.logoutButton {
-  padding: 0.5rem 1rem;
-  background: transparent;
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.875rem;
-  transition: background-color 0.2s;
-}
-
-.logoutButton:hover {
-  background: var(--input-bg);
+  opacity: 0.6;
+  color: var(--primary);
 }
 
 .main {
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem 2rem 6rem;
 }
 
 .dateSelector {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--background-card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
 }
 
 .dateSelector label {
+  font-size: 0.85rem;
   font-weight: 500;
-  color: var(--foreground);
+  color: var(--foreground-muted);
 }
 
 .dateInput {
-  padding: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--background);
   color: var(--foreground);
-  font-size: 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.dateInput::-webkit-calendar-picker-indicator {
+  opacity: 0.6;
 }
 
 .actions {
-  margin: 2rem 0;
+  margin: 1.5rem 0;
 }
 
 .addButton {
-  padding: 0.75rem 1.5rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
   background: var(--primary);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
   font-size: 1rem;
-  font-weight: 500;
-  transition: background-color 0.2s;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(126, 184, 164, 0.25);
 }
 
 .addButton:hover {
   background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(126, 184, 164, 0.35);
 }
 
 .loading {
@@ -188,9 +198,8 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  font-size: 1.125rem;
-  color: var(--foreground);
-  opacity: 0.7;
+  font-size: 1rem;
+  color: var(--foreground-muted);
 }
 
 /* Mobile FAB - Floating Action Button */
@@ -199,24 +208,24 @@
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: var(--primary);
   color: white;
   border: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 24px rgba(126, 184, 164, 0.35);
   cursor: pointer;
   z-index: 1000;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .fab:hover {
-  background: var(--primary-hover);
   transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  background: var(--primary-hover);
+  box-shadow: 0 8px 32px rgba(126, 184, 164, 0.45);
 }
 
 .fab:active {
@@ -229,29 +238,24 @@
     position: relative;
   }
 
-  /* Hide desktop nav on mobile */
   .headerActions {
     display: none;
   }
 
-  /* Show hamburger on mobile */
   .hamburger {
     display: flex;
   }
 
   .main {
     padding: 1rem;
-    padding-bottom: 5rem; /* Space for FAB */
+    padding-bottom: 6rem;
   }
 
-  /* Hide regular Add button on mobile */
   .actions {
     display: none;
   }
 
-  /* Show FAB on mobile */
   .fab {
     display: flex;
   }
 }
-

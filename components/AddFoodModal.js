@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { searchCatalogFoods } from '@/lib/brandedFoodCatalog'
 import { searchProducts } from '@/lib/openFoodFacts'
 import { searchBrandedFoods } from '@/lib/usdaFoodData'
 import styles from './AddFoodModal.module.css'
@@ -48,6 +49,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
   const [brandResults, setBrandResults] = useState([])
   const [brandSearching, setBrandSearching] = useState(false)
   const [brandSearchCount, setBrandSearchCount] = useState(0)
+  const [brandSearchSource, setBrandSearchSource] = useState('catalog')
 
   // Custom food form state
   const [customFood, setCustomFood] = useState({
@@ -74,11 +76,12 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
     }
   }, [loggedTime, mealTypeManuallySet])
 
-  // Debounced brand search - queries both Open Food Facts AND USDA
+  // Search our local catalog first. Third-party APIs are only a miss fallback.
   useEffect(() => {
     if (activeTab !== 'brand-search' || brandSearchTerm.length < 2) {
       setBrandResults([])
       setBrandSearchCount(0)
+      setBrandSearchSource('catalog')
       return
     }
 
@@ -87,7 +90,17 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
 
     const timeoutId = setTimeout(async () => {
       try {
-        // Query both databases in parallel for better brand coverage
+        const catalogResult = await searchCatalogFoods(brandSearchTerm, 20)
+        if (cancelled) return
+
+        if (catalogResult.products.length > 0) {
+          setBrandResults(catalogResult.products)
+          setBrandSearchCount(catalogResult.count)
+          setBrandSearchSource('catalog')
+          return
+        }
+
+        // Until the catalog is fully populated, preserve coverage on misses.
         const [offResult, usdaResult] = await Promise.all([
           searchProducts(brandSearchTerm),
           searchBrandedFoods(brandSearchTerm),
@@ -120,6 +133,7 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
 
         setBrandResults(combined)
         setBrandSearchCount(offResult.count + usdaResult.totalHits)
+        setBrandSearchSource('live')
       } catch (err) {
         if (!cancelled) {
           console.error('Brand search error:', err)
@@ -232,6 +246,12 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
         is_custom: true,
         user_id: userId,
         usda_fdc_id: item.source === 'brand' ? (food.fdcId || null) : null,
+        ...(food.catalogId
+          ? {
+              branded_food_id: food.catalogId,
+              entry_source: 'catalog',
+            }
+          : {}),
       })
       .select('id')
       .single()
@@ -430,7 +450,10 @@ export default function AddFoodModal({ foods, selectedDate, userId, onClose, onF
                 )}
               </div>
               <div className={styles.poweredBy}>
-                Powered by <a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener noreferrer">USDA FoodData Central</a> & <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener noreferrer">Open Food Facts</a>
+                {brandSearchSource === 'catalog'
+                  ? 'Fast results from the Plate food catalog · '
+                  : 'Live fallback · '}
+                Data from <a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener noreferrer">USDA FoodData Central</a> & <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener noreferrer">Open Food Facts</a>
               </div>
             </>
           )}

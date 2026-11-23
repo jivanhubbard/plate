@@ -1,6 +1,7 @@
 # Plate - Food Tracker App
 
-A lightweight, privacy-focused web application for tracking food intake and macronutrients during intermittent fasting.
+A privacy-focused nutrition tracker. The current product is a Next.js web app;
+the local `ios-build` branch also contains the activity-informed iOS foundation.
 
 ## Setup Instructions
 
@@ -45,10 +46,18 @@ plate-app/
 │   └── ...
 ├── lib/              # Utility functions
 │   └── supabase.js   # Supabase client
+├── ios/              # SwiftUI + HealthKit client (ios-build branch)
+├── scripts/catalog/  # Streaming USDA / Open Food Facts imports
 ├── supabase/         # Database files
 │   └── schema.sql    # Database schema
 └── ...
 ```
+
+## Fast branded-food search
+
+The app can search a Plate-owned catalog before falling back to live USDA and
+Open Food Facts requests. See [docs/food-catalog.md](docs/food-catalog.md) for
+the migration, import, licensing, and local-development workflow.
 
 ## Tech Stack
 

@@ -1,7 +1,7 @@
 # Plate - Food Tracker App
 
 A privacy-focused nutrition tracker. The current product is a Next.js web app;
-the local `ios-build` branch also contains the activity-informed iOS foundation.
+native iPhone and Mac apps live in `apple/`.
 
 ## Setup Instructions
 
@@ -46,7 +46,7 @@ plate-app/
 │   └── ...
 ├── lib/              # Utility functions
 │   └── supabase.js   # Supabase client
-├── ios/              # SwiftUI + HealthKit client (ios-build branch)
+├── apple/            # SwiftUI iPhone + Mac apps (see apple/README.md)
 ├── scripts/catalog/  # Streaming USDA / Open Food Facts imports
 ├── supabase/         # Database files
 │   └── schema.sql    # Database schema
